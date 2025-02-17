@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "955596065076",
+    "project_id": "anjanitek-communications",
+    "storage_bucket": "anjanitek-communications.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:955596065076:android:46b0f8ffd283b9421b7d61",
+        "android_client_info": {
+          "package_name": "com.anjanitek"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCkgLC5a9wHOXq1UY3Ii-hIo3QVkV5cD38"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
