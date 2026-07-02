@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:anjanitek/home.dart';
 import 'package:anjanitek/modals/dealers.dart';
 import 'package:anjanitek/utils/show_toast.dart';
-import 'package:device_uuid/device_uuid.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -53,7 +53,7 @@ class _PaymentUpdateAdminState extends State<PaymentUpdateAdmin> with TickerProv
 
   DateTime today = DateTime.now();
   String _uuid = 'Unknown';
-  final _deviceUuidPlugin = DeviceUuid();
+
   late SharedPreferences prefs;
   
 

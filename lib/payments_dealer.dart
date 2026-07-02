@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:anjanitek/modals/dealers.dart';
 import 'package:anjanitek/modals/invoices.dart';
 import 'package:anjanitek/modals/payments.dart';
+import 'package:anjanitek/payments_dealer_create.dart';
 import 'package:anjanitek/utils/app_header.dart';
 import 'package:intl/intl.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -25,6 +26,7 @@ import 'package:anjanitek/utils/constants.dart' as Constants;
 import 'package:anjanitek/utils/utils.dart';
 import 'package:anjanitek/verify.dart';
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 
 // this is 
 class PaymentsDealer extends StatefulWidget {
@@ -130,8 +132,11 @@ class _PaymentsDealerState extends State<PaymentsDealer> with TickerProviderStat
 
       // refresh the list
       Future<void> _refreshList() async {
+        
         // Add your refresh logic here, e.g. fetching new data from a server
         await Future.delayed(const Duration(seconds: 2));
+        paymentsList.clear();
+        offset = 0;
         refreshUserPaymentsDealer(context);
       }
 
@@ -156,6 +161,7 @@ class _PaymentsDealerState extends State<PaymentsDealer> with TickerProviderStat
         // Decode the JSON string into a Map using the jsonDecode function
         var jsonString = jsonDecode(result.body); 
         
+        
         // convert jsonString to Map
         var jsonObject = jsonString as Map; 
         
@@ -168,8 +174,10 @@ class _PaymentsDealerState extends State<PaymentsDealer> with TickerProviderStat
 
             if(invoicesData.isNotEmpty){
               // convert to list
-              paymentsList = invoicesData.map<Payments>((json) => Payments.fromJson(json)).toList();
+              List<Payments> paymentsList1 = invoicesData.map<Payments>((json) => Payments.fromJson(json)).toList();
+              paymentsList.addAll(paymentsList1);
               // print(paymentsList);
+                // paymentsList.sort((a, b) => format.parse(a.paymentDate!).compareTo(format.parse(b.paymentDate!)));
               
               setState(() {
                 // Get new user data
@@ -298,141 +306,47 @@ class _PaymentsDealerState extends State<PaymentsDealer> with TickerProviderStat
     return Scaffold(
       backgroundColor: Colors.white,
         body: 
+        SafeArea(
+           child:
          FadeTransition(opacity: _controller,
         child:
         
-        // Stack(
+        Stack(
           
-        //   children: [
+          children: [
             
-        //       FadeTransition(opacity: _controller,
-        //         child:
-        //         ScaleTransition(scale: CurvedAnimation(
-        //                         parent: _controllerCards,
-        //                         curve: Curves.ease, // Use Curves.easeIn for ease-in animation
-        //                       ),alignment: Alignment.center,
-        //           child:
+              // FadeTransition(opacity: _controller,
+              //   child:
+              //   ScaleTransition(scale: CurvedAnimation(
+              //                   parent: _controllerCards,
+              //                   curve: Curves.ease, // Use Curves.easeIn for ease-in animation
+              //                 ),alignment: Alignment.center,
+              //     child:
                     
-        //             Container(
-        //               width: 350.0, // Replace with your desired size
-        //               height: 350.0, // Replace with your desired size
-        //               decoration: BoxDecoration(
-        //                 boxShadow: [
-        //                   BoxShadow(
-        //                     color: const Color(0xFFFF93F4).withOpacity(0.5),
-        //                     offset: const Offset(0.0, 0.0),
-        //                     blurRadius: 44.0,
-        //                     spreadRadius: 27.3,
-        //                   ),
-        //                 ],
-        //                 // border: Border.all(color: Colors.black, width: 2.0),
-        //                 shape: BoxShape.circle,
-        //                 color: const Color(0xFFFF93F4).withOpacity(0.0),
-        //               ),
-        //             ),
-        //         )
-        //       ),
-          //     Positioned(
-          //       top: MediaQuery.of(context).size.height/2, // Randomly set top position
-          //       left: (MediaQuery.of(context).size.width/2),
-          //       child:   
-          //         FadeTransition(opacity: _controller,
-          //           child:
-          //           ScaleTransition(scale: CurvedAnimation(
-          //                       parent: _controllerCards,
-          //                       curve: Curves.ease, // Use Curves.easeIn for ease-in animation
-          //                     ),alignment: Alignment.center,
-          //             child:
-                        
-          //               Container(
-          //                 width: 1250.0, // Replace with your desired size
-          //                 height: 1250.0, // Replace with your desired size
-          //                 decoration: BoxDecoration(
-          //                   boxShadow: [
-          //                     BoxShadow(
-          //                       color: const Color(0xFF7CE3FF).withOpacity(0.3),
-          //                       offset: const Offset(0.0, 0.0),
-          //                       blurRadius: 44.0,
-          //                       spreadRadius: 27.3,
-          //                     ),
-          //                   ],
-          //                   // border: Border.all(color: Colors.black, width: 2.0),
-          //                   shape: BoxShape.circle,
-          //                   color: const Color(0xFF7CE3FF).withOpacity(0.0),
-          //                 ),
-          //               ),
-          //           )
-          //         ),
-          //     ),
-          // Positioned(
-          //     top: MediaQuery.of(context).size.height/2, // Randomly set top position
-          //     left: 0,
-          //     child:   
-          //     FadeTransition(opacity: _controller,
-          //       child:
-          //       ScaleTransition(scale: CurvedAnimation(
-          //                       parent: _controllerCards,
-          //                       curve: Curves.ease, // Use Curves.easeIn for ease-in animation
-          //                     ),alignment: Alignment.center,
-          //         child:
-                    
-          //               Container(
-          //                 width: 250.0, // Replace with your desired size
-          //                 height: 250.0, // Replace with your desired size
-          //                 decoration: BoxDecoration(
-          //                   boxShadow: [
-          //                     BoxShadow(
-          //                       color: const Color(0xFFB07CFF).withOpacity(0.3),
-          //                       offset: const Offset(0.0, 0.0),
-          //                       blurRadius: 44.0,
-          //                       spreadRadius: 27.3,
-          //                     ),
-          //                   ],
-          //                   // border: Border.all(color: Colors.black, width: 2.0),
-          //                   shape: BoxShape.circle,
-          //                   color: const Color(0xFFB07CFF).withOpacity(0.0),
-          //                 ),
-          //               ),
-          //           )
-          //       )
-          //     ),
+              //       Container(
+              //         width: 350.0, // Replace with your desired size
+              //         height: 350.0, // Replace with your desired size
+              //         decoration: BoxDecoration(
+              //           boxShadow: [
+              //             BoxShadow(
+              //               color: const Color(0xFFFF93F4).withOpacity(0.5),
+              //               offset: const Offset(0.0, 0.0),
+              //               blurRadius: 44.0,
+              //               spreadRadius: 27.3,
+              //             ),
+              //           ],
+              //           // border: Border.all(color: Colors.black, width: 2.0),
+              //           shape: BoxShape.circle,
+              //           color: const Color(0xFFFF93F4).withOpacity(0.0),
+              //         ),
+              //       ),
+              //   )
+              // ),
 
-          //     Positioned(
-          //     top: MediaQuery.of(context).size.height/2 - 200, // Randomly set top position
-          //     left: MediaQuery.of(context).size.width - 300,
-          //     // right: 0,
-          //     child:   
 
-          //       FadeTransition(opacity: _controller,
-          //       child:
-          //       ScaleTransition(scale: CurvedAnimation(
-          //                       parent: _controllerCards,
-          //                       curve: Curves.ease, // Use Curves.easeIn for ease-in animation
-          //                     ),alignment: Alignment.center,
-          //         child:
-          //           Container(
-          //             width: 350.0, // Replace with your desired size
-          //             height: 350.0, // Replace with your desired size
-          //             decoration: BoxDecoration(
-          //               boxShadow: [
-          //                 BoxShadow(
-          //                   color: const Color(0xFFFFCB7C).withOpacity(0.4),
-          //                   offset: const Offset(0.0, 0.0),
-          //                   blurRadius: 44.0,
-          //                   spreadRadius: 27.3,
-          //                 ),
-          //               ],
-          //               // border: Border.all(color: Colors.black, width: 2.0),
-          //               shape: BoxShape.circle,
-          //               color: const Color(0xFFFFCB7C).withOpacity(0.0),
-          //             ),
-          //           ),
-          //         )
-          //       ),
-          //     ),
-            
-        Container(
-                    padding: EdgeInsets.fromLTRB(8, 0, 8, 16),
+
+Container(
+                    padding: const EdgeInsets.fromLTRB(8, 0, 8, 16),
                     child:
             Align(
               alignment: Alignment.topCenter,
@@ -462,23 +376,6 @@ class _PaymentsDealerState extends State<PaymentsDealer> with TickerProviderStat
                                 // sizedBox(16),
                                 Center(child: connectionStatus ? sizedBox(0) : Text('No network detected. Try again later!', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, color: Colors.red, fontWeight: FontWeight.bold)),),
                                 
-                                // sizedBox(8),
-                                //  MaterialButton(
-                                //     child: Text('Update profile'),
-                                //     padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
-                                //     color: Palette.blue,
-                                //     textColor: Palette.lightBackground,
-                                //     splashColor: Color(0xFF008060),
-                                //     // colorBrightness: Brightness.light,
-                                //     elevation: 0,
-                                //     highlightElevation: 2,
-                                //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-                                //     onPressed: () => updatePaymentsDealer(context),
-                                //   ),
-                                
-
-
-                                
                               ],
                             
                             ),
@@ -492,7 +389,7 @@ class _PaymentsDealerState extends State<PaymentsDealer> with TickerProviderStat
                             onRefresh: _refreshList,
                             child: 
                               ListView.builder(
-                                  physics: AlwaysScrollableScrollPhysics(),
+                                  physics: const AlwaysScrollableScrollPhysics(),
                                   controller: scrollController,
                                   scrollDirection: Axis.vertical,
                                   itemCount: paymentsList.length,
@@ -506,16 +403,22 @@ class _PaymentsDealerState extends State<PaymentsDealer> with TickerProviderStat
                                                   ),alignment: Alignment.bottomCenter,
                                                   child:
                                                 Container(
-                                                      margin: EdgeInsets.fromLTRB(8,8,8,8),
-                                                      padding: EdgeInsets.fromLTRB(16,16,16,8),
-                                                      decoration: BoxDecoration(
+                                                      margin: const EdgeInsets.fromLTRB(8,8,8,8),
+                                                      padding: const EdgeInsets.fromLTRB(16,16,16,8),
+                                                      decoration: const BoxDecoration(
                                                         color: Colors.white,
-                                                        borderRadius: const BorderRadius.all(Radius.circular(24)),
+                        //                                 gradient: LinearGradient(
+                        //   colors: [Color(0xFFFFFFFF), Color.fromARGB(255, 225, 225, 225), Color(0xFFFFFFFF),],
+                        //   // stops: [0, 1],
+                        //   begin: AlignmentDirectional(0.94, -1),
+                        //   end: AlignmentDirectional(-0.94, 1),
+                        // ),
+                                                        borderRadius: BorderRadius.all(Radius.circular(16)),
                                                         // border: Border.all(
                                                         //           color: Colors.black12, // Set the color of the border here
                                                         //           width: 1, // Set the width of the border here
                                                         //         ),
-                                                        boxShadow: const [
+                                                        boxShadow: [
                                                           BoxShadow(
                                                             color: Colors.black12,
                                                             offset: Offset(0.0, 0.0),
@@ -524,6 +427,29 @@ class _PaymentsDealerState extends State<PaymentsDealer> with TickerProviderStat
                                                           ),
                                                         ]
                                                       ),
+
+                      //                                 Container(
+                      // width: MediaQuery.sizeOf(context).width * 0.92,
+                      // height: 190,
+                      // decoration: BoxDecoration(
+                      //   boxShadow: [
+                      //     BoxShadow(
+                      //       blurRadius: 6,
+                      //       color: Color(0x4B1A1F24),
+                      //       offset: Offset(
+                      //         0.0,
+                      //         2,
+                      //       ),
+                      //     )
+                      //   ],
+                      //   gradient: LinearGradient(
+                      //     colors: [Color(0xFF00968A), Color(0xFFF2A384)],
+                      //     stops: [0, 1],
+                      //     begin: AlignmentDirectional(0.94, -1),
+                      //     end: AlignmentDirectional(-0.94, 1),
+                      //   ),
+                      //   borderRadius: BorderRadius.circular(8),
+                      // ),
                                           child: invoiceCard(index),
                                         )
                                     ));
@@ -533,33 +459,211 @@ class _PaymentsDealerState extends State<PaymentsDealer> with TickerProviderStat
                             : 
                             Expanded(
                               child: Center(
-                                child: Column(
+                                child: 
+                                (!refreshCheckProgress && paymentsList.isEmpty) ? 
+                                Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Icon(PhosphorIconsRegular.currencyInr, color: Color(0xFFAAAAAA), size: 32, ),
+                                    
+                                    const Icon(PhosphorIconsRegular.currencyInr, color: Color(0xFFAAAAAA), size: 32, ),
                                     sizedBox(8),
                                     Text('No payments done yet!', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyLarge, color: Colors.black54, fontWeight: FontWeight.w500, fontSize: 14), ),
                                   ],
-                                )
+                                ) : (refreshCheckProgress && paymentsList.isEmpty) ? const AppProgress(height: 30, width: 30,) :
+                                sizedBox(0)
                               )
                             ),
                             
                             // loader while fetching data
-                            refreshCheckProgress? AppProgress(height: 30, width: 30,) : new SizedBox(height: 0,),
+                            (refreshCheckProgress && paymentsList.isNotEmpty) ? const AppProgress(height: 30, width: 30,) : new SizedBox(height: 0,),
                             
                           
                             
 
-
+sizedBox(24),
                           
                           ],
                         )
-                  )
-                ),
-            )
-            )
-        )
-    );
+                  ),
+                  ),
+                  ),
+                  ),
+             
+          Positioned(
+            bottom: 16.0,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: 
+              ElevatedButton(
+                  style: ButtonStyle(backgroundColor: WidgetStateProperty.all(const Color(0xFF048563))),
+                  onPressed: () async {
+                    final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => PaymentsDealerCreate()));
+                    
+                    if (result != null && result is Payments) {
+                      setState(() {
+                        paymentsList.insert(0, result);
+                      });
+                    }
+                    // Navigator.pushNamed(context, '/payments_dealer_create');
+                  },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          
+                          // selectedTagIds.length > 0 ?
+                          // Row(
+                          //   children: [
+                          //     Text(selectedTagIds.length.toString(), style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyMedium, color: Colors.black, fontWeight: FontWeight.w500), ),
+                          //     SizedBox(width: 8.0),
+                              
+                          //   ],
+                          // ) : sizedBox(0),
+                          const Icon(PhosphorIconsRegular.scroll, color: Colors.white),
+                          const SizedBox(width: 8.0),
+                          Text('Upload Payment Details', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyMedium, color: Colors.white, fontWeight: FontWeight.w500), ),
+                          
+                          
+                        ],
+                      )
+                    )
+                )
+              )
+              
+          ]  ),
+              ),
+              ),
+              );
+            
+        // Container(
+        //             padding: EdgeInsets.fromLTRB(8, 0, 8, 16),
+        //             child:
+        //     Align(
+        //       alignment: Alignment.topCenter,
+        //       child:
+        //         SafeArea(
+
+        //         child: Container(
+        //             // margin: EdgeInsets.fromLTRB(16, 0, 16, 16),
+        //             child:
+        //                 Column(
+
+        //                   mainAxisAlignment: MainAxisAlignment.start,
+        //                   crossAxisAlignment: CrossAxisAlignment.start,
+        //                   mainAxisSize: MainAxisSize.max,
+
+        //                   children: <Widget>[
+
+        //                     Column(
+        //                     // child: CardRound(Palette.lightBackground, Column(
+        //                       crossAxisAlignment: CrossAxisAlignment.stretch,
+        //                       children: <Widget>[
+        //                         // sizedBox(24),
+        //                         // Image.asset('assets/anjani_title.webp', scale: 2,), 
+        //                         AppHeader('Invoices', '', 1),
+        //                         // sizedBox(16),
+        //                         Text('Payments', style: GoogleFonts.montserrat(textStyle: Theme.of(context).textTheme.headlineSmall, fontWeight: FontWeight.bold), ),
+        //                         // sizedBox(16),
+        //                         Center(child: connectionStatus ? sizedBox(0) : Text('No network detected. Try again later!', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, color: Colors.red, fontWeight: FontWeight.bold)),),
+                                
+        //                         // sizedBox(8),
+        //                         //  MaterialButton(
+        //                         //     child: Text('Update profile'),
+        //                         //     padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
+        //                         //     color: Palette.blue,
+        //                         //     textColor: Palette.lightBackground,
+        //                         //     splashColor: Color(0xFF008060),
+        //                         //     // colorBrightness: Brightness.light,
+        //                         //     elevation: 0,
+        //                         //     highlightElevation: 2,
+        //                         //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        //                         //     onPressed: () => updatePaymentsDealer(context),
+        //                         //   ),
+                                
+
+
+                                
+        //                       ],
+                            
+        //                     ),
+
+        //                     sizedBox(8),
+
+        //                     paymentsList.isNotEmpty ?
+        //                     Expanded(
+                              
+        //                       child: RefreshIndicator(
+        //                     onRefresh: _refreshList,
+        //                     child: 
+        //                       ListView.builder(
+        //                           physics: AlwaysScrollableScrollPhysics(),
+        //                           controller: scrollController,
+        //                           scrollDirection: Axis.vertical,
+        //                           itemCount: paymentsList.length,
+        //                           itemBuilder: (context, index){
+                                    
+        //                             return  FadeTransition(opacity: _controller,
+        //                                   child:
+        //                                   ScaleTransition(scale: CurvedAnimation(
+        //                                             parent: _controllerCards,
+        //                                             curve: Curves.ease, // Use Curves.easeIn for ease-in animation
+        //                                           ),alignment: Alignment.bottomCenter,
+        //                                           child:
+        //                                         Container(
+        //                                               margin: EdgeInsets.fromLTRB(8,8,8,8),
+        //                                               padding: EdgeInsets.fromLTRB(16,16,16,8),
+        //                                               decoration: BoxDecoration(
+        //                                                 color: Colors.white,
+        //                                                 borderRadius: const BorderRadius.all(Radius.circular(24)),
+        //                                                 // border: Border.all(
+        //                                                 //           color: Colors.black12, // Set the color of the border here
+        //                                                 //           width: 1, // Set the width of the border here
+        //                                                 //         ),
+        //                                                 boxShadow: const [
+        //                                                   BoxShadow(
+        //                                                     color: Colors.black12,
+        //                                                     offset: Offset(0.0, 0.0),
+        //                                                     blurRadius: 12.0,
+        //                                                     spreadRadius: 0.3,
+        //                                                   ),
+        //                                                 ]
+        //                                               ),
+        //                                   child: invoiceCard(index),
+        //                                 )
+        //                             ));
+        //                           }),
+        //                       )
+        //                     )
+        //                     : 
+        //                     Expanded(
+        //                       child: Center(
+        //                         child: Column(
+        //                           mainAxisAlignment: MainAxisAlignment.center,
+        //                           children: [
+        //                             Icon(PhosphorIconsRegular.currencyInr, color: Color(0xFFAAAAAA), size: 32, ),
+        //                             sizedBox(8),
+        //                             Text('No payments done yet!', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyLarge, color: Colors.black54, fontWeight: FontWeight.w500, fontSize: 14), ),
+        //                           ],
+        //                         )
+        //                       )
+        //                     ),
+                            
+        //                     // loader while fetching data
+        //                     refreshCheckProgress? AppProgress(height: 30, width: 30,) : new SizedBox(height: 0,),
+                            
+                          
+                            
+
+
+                          
+        //                   ],
+        //                 )
+        //           )
+        //         ),
+        //     )
+        //     )
+        // )
+    // );
   }
 
   // Refresh profile
@@ -607,27 +711,149 @@ Widget invoiceCard(int position){
       //   ),
       // Text(PaymentsList[position].circularType!.toUpperCase(), style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, color: Colors.black54)),
       // sizedBox(8),
-      Text('Invoice No: ${paymentsList[position].invoiceNo!}', textAlign: TextAlign.start, style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyLarge, color: Colors.black, )),
+      // (paymentsList[position].invoiceNo != '-') ?
+      (paymentsList[position].adminId!.length > 1) ?
+      Text('Invoice No: ${paymentsList[position].invoiceNo!}', textAlign: TextAlign.start, style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyMedium, color: Colors.black, ))
+      // : sizedBox(0),
+      : Row(children: [
+              const Icon(PhosphorIconsFill.clock, size: 20, color: Colors.orange,),
+              const SizedBox(width: 4,),
+              Expanded(child: 
+              Text('Pending with Finance team for verification', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyMedium, color: Colors.black87)),
+              )
+              // Text('Pending for verification with Finance team', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyMedium, color: Colors.black87)),
+            ],),
       sizedBox(8),
       Row(
         children: [
           Text('₹ ${NumberFormat("#,##,##0.00", "en_IN").format(paymentsList[position].amount!)}', style: GoogleFonts.montserrat(textStyle: Theme.of(context).textTheme.bodyLarge, fontSize: 20, letterSpacing: 1.5, fontWeight: FontWeight.bold)),
-          SizedBox(width: 4,),
-          Icon(PhosphorIconsFill.checkCircle, size: 24, color: Color(0xFF01B11C),),
+          const SizedBox(width: 4,),
+          (paymentsList[position].adminId != '-') ? const Icon(PhosphorIconsFill.checkCircle, size: 24, color: Color(0xFF01B11C),) : 
+          sizedBox(0)
+            // Row(children: [
+            //   const Icon(PhosphorIconsFill.clock, size: 24, color: Colors.grey,),
+            //   const SizedBox(width: 4,),
+            //   Text('Sent for verification', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, color: Colors.grey)),
+            // ],)
+          
+          // Icon(PhosphorIconsFill.checkCircle, size: 24, color: Color(0xFF01B11C),),
           // SizedBox(width: 4,),
           // Text('${paymentsList[position].type}', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, fontWeight: FontWeight.w600, color: paymentsList[position].type == 'credit' ? Colors.green : Color(0xFFC41306))),  
         ],
       ),
+      sizedBox(4),
+      Text('${DateFormat('dd-MMM-yyyy', 'en_US').format(getDate(paymentsList[position].paymentDate!))}'.toUpperCase(), textAlign: TextAlign.center, style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, color: Colors.black87, letterSpacing: 1.5, fontWeight: FontWeight.w500 )),
       // sizedBox(8),
       // Text('${paymentsList[position].invoiceNo}', textAlign: TextAlign.center, style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyMedium, color: Colors.black54, )),
       
 
-      sizedBox(8),
+      sizedBox(4),
       divider(Colors.black12),
       sizedBox(4),
-      Text('Transaction id: ${paymentsList[position].transactionId!}' , style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyMedium, color: Colors.black54), overflow: TextOverflow.ellipsis, maxLines: 2, softWrap: true, ),
-      sizedBox(4),
-      Text('Paid on: ${DateFormat('d-MMM-y', 'en_US').format(getDate(paymentsList[position].paymentDate!))}', textAlign: TextAlign.center, style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyMedium, color: Color(0xFF018D16), fontWeight: FontWeight.w500 )),
+      // Text('Detail: ${paymentsList[position].transactionId!}' , style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyMedium, color: Colors.black54), overflow: TextOverflow.ellipsis, maxLines: 2, softWrap: true, ),
+
+      Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          spacing: 4,
+          children: [
+                // Text('Detail:' , style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, color: Colors.black87), overflow: TextOverflow.ellipsis, maxLines: 4, softWrap: true, ),
+                Expanded(child: 
+                Text('${paymentsList[position].transactionId!}' , style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, color: Colors.black54), overflow: TextOverflow.ellipsis, maxLines: 4, softWrap: true, ),
+                )
+          ]
+        ),
+      // sizedBox(4),
+      // Text('Paid on: ${DateFormat('d-MMM-y', 'en_US').format(getDate(paymentsList[position].paymentDate!))}', textAlign: TextAlign.center, style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyMedium, color: const Color(0xFF018D16), fontWeight: FontWeight.w500 )),
+      (paymentsList[position].particular!.length == 1) ? sizedBox(0) :
+      IconButton(
+          icon: Container(
+            decoration: BoxDecoration(
+              color: Colors.grey.shade200,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            padding: const EdgeInsets.all(8),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(PhosphorIconsRegular.paperclip, color: Colors.black54),
+                const SizedBox(width: 4),
+                Text(
+                  'See attachment',
+                  style: GoogleFonts.inter(
+                    textStyle: Theme.of(context).textTheme.bodySmall,
+                    color: Colors.black87,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 4,
+                  softWrap: true,
+                ),
+              ],
+            ),
+          ),
+          // icon: 
+          // Row(
+          //   children: [
+          //     Icon(PhosphorIconsRegular.paperclip,),
+          //     Text('View attachment' , style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, color: Colors.black87), overflow: TextOverflow.ellipsis, maxLines: 4, softWrap: true, ),
+          //   ],
+          // ),
+          onPressed: () async {
+ 
+            if(paymentsList[position].particular!.endsWith('.pdf')){
+              
+              try {
+                  if (!await launchUrl(Uri.parse('https://firebasestorage.googleapis.com/v0/b/anjanitek-communications.firebasestorage.app/o/receipt%2F'+paymentsList[position].particular!+'?alt=media'), mode: LaunchMode.externalApplication)) {
+                    print('Launched');
+                  }
+                  } catch (e) {
+                  print('Error opening PDF: $e');
+                }
+              }
+              else {
+              
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                builder: (BuildContext context) {
+                  return Container(
+                    color: Colors.white,
+                    padding: const EdgeInsets.all(16.0),
+                    height: MediaQuery.of(context).size.height * 0.8,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Receipt',
+                          style: GoogleFonts.inter(
+                            textStyle: Theme.of(context).textTheme.headlineSmall,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                    const SizedBox(height: 16),
+                    Expanded(
+                    child: Center(
+                        child: 
+                          Image.network(
+                              'https://firebasestorage.googleapis.com/v0/b/anjanitek-communications.firebasestorage.app/o/receipt%2F'+paymentsList[position].particular!+'?alt=media',
+                              fit: BoxFit.fill,
+                              // scale: 1.0,
+                              width: MediaQuery.sizeOf(context).width,
+                              errorBuilder: (context, error, stackTrace) {
+                                return sizedBox(0);
+                              },
+                            ),
+                          ),
+                        )
+                      ]
+                    )
+                  );
+                },
+              );
+          };
+          },
+        ),
+      
       sizedBox(4),
       
       

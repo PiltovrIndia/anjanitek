@@ -11,7 +11,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart';
-import 'package:provider/provider.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:anjanitek/database_internal.dart';
 import 'package:anjanitek/modals/users.dart';
@@ -212,7 +212,7 @@ class _DealerDetailsAdminState extends State<DealerDetailsAdmin> with TickerProv
 
         child: SingleChildScrollView(
       child: Container(
-        margin: EdgeInsets.fromLTRB(16, 0, 16, 16),
+        margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
         child:
       Column(
 
@@ -249,10 +249,10 @@ class _DealerDetailsAdminState extends State<DealerDetailsAdmin> with TickerProv
                   child: Container( 
                     decoration: BoxDecoration(
                       // color: Theme.of(context).shadowColor,
-                      color: Color.fromARGB(255, 186, 232, 220),
+                      color: const Color.fromARGB(255, 186, 232, 220),
                       borderRadius: const BorderRadius.all(Radius.circular(16)),
                       border: Border.all(
-                                color: Color(0x33008060), // Set the color of the border here
+                                color: const Color(0x33008060), // Set the color of the border here
                                 width: 1, // Set the width of the border here
                               ),
                       boxShadow: const [
@@ -288,10 +288,10 @@ class _DealerDetailsAdminState extends State<DealerDetailsAdmin> with TickerProv
                       Container( 
                         decoration: BoxDecoration(
                           // color: Theme.of(context).shadowColor,
-                          color: Color.fromARGB(255, 186, 232, 220),
+                          color: const Color.fromARGB(255, 186, 232, 220),
                           borderRadius: const BorderRadius.all(Radius.circular(16)),
                           border: Border.all(
-                                    color: Color(0x33008060), // Set the color of the border here
+                                    color: const Color(0x33008060), // Set the color of the border here
                                     width: 1, // Set the width of the border here
                                   ),
                           boxShadow: const [
@@ -324,10 +324,10 @@ class _DealerDetailsAdminState extends State<DealerDetailsAdmin> with TickerProv
                       Container( 
                         decoration: BoxDecoration(
                           // color: Theme.of(context).shadowColor,
-                          color: Color.fromARGB(255, 186, 232, 220),
+                          color: const Color.fromARGB(255, 186, 232, 220),
                           borderRadius: const BorderRadius.all(Radius.circular(16)),
                           border: Border.all(
-                                    color: Color(0x33008060), // Set the color of the border here
+                                    color: const Color(0x33008060), // Set the color of the border here
                                     width: 1, // Set the width of the border here
                                   ),
                           boxShadow: const [
@@ -381,7 +381,7 @@ class _DealerDetailsAdminState extends State<DealerDetailsAdmin> with TickerProv
               //   ),
               sizedBox(16),
 
-              refreshCheckProgress ? AppProgress(height: 32, width: 32) : sizedBox(0),
+              refreshCheckProgress ? const AppProgress(height: 32, width: 32) : sizedBox(0),
               
               ScaleTransition(scale: CurvedAnimation(
                                     parent: _controllerCards,
@@ -427,7 +427,7 @@ class _DealerDetailsAdminState extends State<DealerDetailsAdmin> with TickerProv
                         child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Icon(PhosphorIconsRegular.phone, color: Color(0xFF008060), size: 20,),
+                                  const Icon(PhosphorIconsRegular.phone, color: Color(0xFF008060), size: 20,),
                                   const SizedBox(width:16),
 
                                   Column(
@@ -461,7 +461,7 @@ class _DealerDetailsAdminState extends State<DealerDetailsAdmin> with TickerProv
                         },
                         child: Row(
                             children: [
-                              Icon(PhosphorIconsRegular.envelopeSimple, color: Color(0xFF008060), size: 20),
+                              const Icon(PhosphorIconsRegular.envelopeSimple, color: Color(0xFF008060), size: 20),
                               const SizedBox(width:16),
                               Expanded(
                                 child: Column(
@@ -512,7 +512,7 @@ class _DealerDetailsAdminState extends State<DealerDetailsAdmin> with TickerProv
                 child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(PhosphorIconsRegular.buildings, color: Color(0xFF008060), size: 20,),
+                      const Icon(PhosphorIconsRegular.buildings, color: Color(0xFF008060), size: 20,),
                       const SizedBox(width:16),
                       Expanded(
                                   child: 
@@ -775,7 +775,7 @@ class _DealerDetailsAdminState extends State<DealerDetailsAdmin> with TickerProv
             child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      gradient: LinearGradient(
+                      gradient: const LinearGradient(
                         colors: [
                           Color(0xFF008060),
                           Color(0xFF008060),
@@ -797,14 +797,14 @@ class _DealerDetailsAdminState extends State<DealerDetailsAdmin> with TickerProv
                           mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
                               Container(
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                     color: Colors.white,
                                     shape: BoxShape.circle,
                                   ),
                                 width: 16,
                                 height: 16,
                                   alignment: Alignment.center,
-                                  child: Icon(PhosphorIconsBold.arrowRight, color: Color(0xFF008060), size: 12, ),
+                                  child: const Icon(PhosphorIconsBold.arrowRight, color: Color(0xFF008060), size: 12, ),
                               ),
                               const SizedBox(width: 8,),
                               Text('Update now', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyLarge, color: Colors.white)),
@@ -879,17 +879,17 @@ class _DealerDetailsAdminState extends State<DealerDetailsAdmin> with TickerProv
                         children: [
                           Text('Disclaimer', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyMedium)),
                           Container(
-                            padding: EdgeInsets.all(8),
-                            decoration: BoxDecoration(
+                            padding: const EdgeInsets.all(8),
+                            decoration: const BoxDecoration(
                                 color: Colors.black12,
-                                borderRadius: const BorderRadius.all(Radius.circular(20)),
+                                borderRadius: BorderRadius.all(Radius.circular(20)),
                             ),
                             child: 
                             InkWell(
                               onTap: () => {
                                     Navigator.pop(context)
                                     },
-                              child: Icon(PhosphorIconsBold.x, color: Colors.black54, size: 24,),
+                              child: const Icon(PhosphorIconsBold.x, color: Colors.black54, size: 24,),
                             ),
                           ),
                         ],
@@ -969,7 +969,7 @@ class _DealerDetailsAdminState extends State<DealerDetailsAdmin> with TickerProv
                         children: [
                           Text('Phone number', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyMedium)),
                           Container(
-                            padding: EdgeInsets.all(8),
+                            padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
                                 color: Theme.of(context).shadowColor,
                                 borderRadius: const BorderRadius.all(Radius.circular(20)),
@@ -979,7 +979,7 @@ class _DealerDetailsAdminState extends State<DealerDetailsAdmin> with TickerProv
                               onTap: () => {
                                     Navigator.pop(context)
                                     },
-                              child: Icon(PhosphorIconsBold.x, color: Colors.black54, size: 24,),
+                              child: const Icon(PhosphorIconsBold.x, color: Colors.black54, size: 24,),
                             ),
                           ),
                         ],
@@ -1001,11 +1001,11 @@ class _DealerDetailsAdminState extends State<DealerDetailsAdmin> with TickerProv
                         // style: const TextStyle(letterSpacing: 25),
                         decoration: InputDecoration(
                           focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black54),
+                          borderSide: const BorderSide(color: Colors.black54),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black38),
+                          borderSide: const BorderSide(color: Colors.black38),
                           borderRadius: BorderRadius.circular(8),
                         ),
                           hintText: (mobile.length > 2) ? mobile : 'Phone number',),
@@ -1025,7 +1025,7 @@ class _DealerDetailsAdminState extends State<DealerDetailsAdmin> with TickerProv
                     
                     MaterialButton(
                       padding: const EdgeInsets.fromLTRB(18.0, 10.0, 18.0, 10.0),
-                      color: Color(0xFF008060),
+                      color: const Color(0xFF008060),
                       splashColor: Colors.black38,
                       colorBrightness: Brightness.dark,
                       elevation: 2,
@@ -1135,7 +1135,7 @@ class _DealerDetailsAdminState extends State<DealerDetailsAdmin> with TickerProv
                         children: [
                           Text('Parents/Guardians', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyMedium)),
                           Container(
-                            padding: EdgeInsets.all(8),
+                            padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
                                 color: Theme.of(context).shadowColor,
                                 borderRadius: const BorderRadius.all(Radius.circular(20)),
@@ -1145,7 +1145,7 @@ class _DealerDetailsAdminState extends State<DealerDetailsAdmin> with TickerProv
                               onTap: () => {
                                     Navigator.pop(context)
                                     },
-                              child: Icon(PhosphorIconsBold.x, color: Colors.black54, size: 24,),
+                              child: const Icon(PhosphorIconsBold.x, color: Colors.black54, size: 24,),
                             ),
                           ),
                         ],

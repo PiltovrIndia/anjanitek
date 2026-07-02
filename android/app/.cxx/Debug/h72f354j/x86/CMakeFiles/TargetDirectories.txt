@@ -1,0 +1,2 @@
+/Users/pavankusuma/Documents/Projects_Active/anjanitek/android/app/.cxx/Debug/h72f354j/x86/CMakeFiles/edit_cache.dir
+/Users/pavankusuma/Documents/Projects_Active/anjanitek/android/app/.cxx/Debug/h72f354j/x86/CMakeFiles/rebuild_cache.dir

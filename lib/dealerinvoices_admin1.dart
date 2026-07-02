@@ -10,7 +10,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart';
-import 'package:provider/provider.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:anjanitek/database_internal.dart';
 import 'package:anjanitek/modals/users.dart';
@@ -452,7 +452,7 @@ class _DealerInvoicesAdmin1State extends State<DealerInvoicesAdmin1> with Ticker
                 SafeArea(
 
                 child: Container(
-                    margin: EdgeInsets.fromLTRB(16, 0, 16, 16),
+                    margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                     child:
                         Column(
 
@@ -531,7 +531,7 @@ class _DealerInvoicesAdmin1State extends State<DealerInvoicesAdmin1> with Ticker
                               onRefresh: _refreshList,
                               child: 
                               ListView.builder(
-                                  physics: AlwaysScrollableScrollPhysics(),
+                                  physics: const AlwaysScrollableScrollPhysics(),
                                   controller: scrollController,
                                   scrollDirection: Axis.vertical,
                                   itemCount: invoicesList.length,
@@ -545,8 +545,8 @@ class _DealerInvoicesAdmin1State extends State<DealerInvoicesAdmin1> with Ticker
                                                   ),alignment: Alignment.bottomCenter,
                                                   child:
                                                 Container(
-                                                      margin: EdgeInsets.fromLTRB(0,8,0,8),
-                                                      padding: EdgeInsets.fromLTRB(16,16,16,8),
+                                                      margin: const EdgeInsets.fromLTRB(0,8,0,8),
+                                                      padding: const EdgeInsets.fromLTRB(16,16,16,8),
                                                       decoration: BoxDecoration(
                                                         color: Colors.white,
                                                         borderRadius: const BorderRadius.all(Radius.circular(24)),
@@ -574,7 +574,7 @@ class _DealerInvoicesAdmin1State extends State<DealerInvoicesAdmin1> with Ticker
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Icon(PhosphorIconsRegular.receipt, color: Color(0xFFAAAAAA), size: 32, ),
+                                    const Icon(PhosphorIconsRegular.receipt, color: Color(0xFFAAAAAA), size: 32, ),
                                     sizedBox(8),
                                     Text('No invoices yet!', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyLarge, color: Colors.black54, fontWeight: FontWeight.w500, fontSize: 14), ),
                                   ],
@@ -583,7 +583,7 @@ class _DealerInvoicesAdmin1State extends State<DealerInvoicesAdmin1> with Ticker
                             ),
                             
                             // loader while fetching data
-                            refreshCheckProgress? AppProgress(height: 30, width: 30,) : new SizedBox(height: 0,),
+                            refreshCheckProgress? const AppProgress(height: 30, width: 30,) : new SizedBox(height: 0,),
                             
                           
                             
@@ -625,17 +625,17 @@ Widget invoiceCard(int position){
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text('${invoicesList[position].invoiceNo}', textAlign: TextAlign.center, style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyMedium, color: Colors.black87, fontWeight: FontWeight.w500 )),
-          SizedBox(width: 8,),
+          const SizedBox(width: 8,),
           // Text('${invoicesList[position].invoiceType}', textAlign: TextAlign.center, style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.titleMedium, fontSize: 12, fontWeight: FontWeight.bold, color: invoicesList[position].invoiceType == 'ATL' ? Colors.redAccent : Color(0xFFC41306), )),
           Container(
               padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
               decoration: BoxDecoration(
-                      color: invoicesList[position].invoiceType == 'ATL' ? Color(0x22FF5252) : Color(0x22C41306),
+                      color: invoicesList[position].invoiceType == 'ATL' ? const Color(0x22FF5252) : const Color(0x22C41306),
                       borderRadius: BorderRadius.circular(4),
                     ),
-                  child: Text('${invoicesList[position].invoiceType}', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, fontWeight: FontWeight.bold, color: invoicesList[position].invoiceType == 'ATL' ? Color(0xFFFF5252) : Color(0xFFC41306))),  
+                  child: Text('${invoicesList[position].invoiceType}', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, fontWeight: FontWeight.bold, color: invoicesList[position].invoiceType == 'ATL' ? const Color(0xFFFF5252) : const Color(0xFFC41306))),  
               ),
-          SizedBox(width: 8,),
+          const SizedBox(width: 8,),
         ]
       ),
       sizedBox(8),
@@ -724,15 +724,15 @@ sizedBox(8),
               Container(
                 padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
                 decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 1, 177, 28),
+                        color: const Color.fromARGB(255, 1, 177, 28),
                         borderRadius: BorderRadius.circular(16),
                       ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(PhosphorIconsRegular.check, size: 16, color: Colors.white),
-                    SizedBox(width: 4,),
+                    const Icon(PhosphorIconsRegular.check, size: 16, color: Colors.white),
+                    const SizedBox(width: 4,),
                     Text('Paid' , style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, height: 1.5, color: Colors.white, fontWeight: FontWeight.bold ), overflow: TextOverflow.ellipsis, maxLines: 2, softWrap: true,  )
                   ]
                 )
@@ -747,8 +747,8 @@ sizedBox(8),
                   mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(PhosphorIconsRegular.warning, size: 16, color: Colors.white),
-                    SizedBox(width: 4,),
+                    const Icon(PhosphorIconsRegular.warning, size: 16, color: Colors.white),
+                    const SizedBox(width: 4,),
                     ((getDate(invoicesList[position].expiryDate!).difference(DateTime.now()).inDays) >= 0) ?
                       Text('${(getTimeDiff(getDate(invoicesList[position].expiryDate!), DateTime.now()))} left' , style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, height: 1.5, color: Colors.white, fontWeight: FontWeight.bold ), overflow: TextOverflow.ellipsis, maxLines: 2, softWrap: true,  )
                       : Text('Expired ${(getDate(invoicesList[position].expiryDate!).difference(DateTime.now()).inDays.abs())} day(s) ago' , style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, height: 1.5, color: Colors.white, fontWeight: FontWeight.bold ), overflow: TextOverflow.ellipsis, maxLines: 2, softWrap: true, ),
@@ -757,15 +757,15 @@ sizedBox(8),
                 )
               ),
               
-            SizedBox(width: 8,),
+            const SizedBox(width: 8,),
             (invoicesList[position].status != Constants.Paid) ?
               Container(
                 padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
                 decoration: BoxDecoration(
-                        color: Color(0x99FFCDD2),
+                        color: const Color(0x99FFCDD2),
                         borderRadius: BorderRadius.circular(16),
                       ),
-                    child: Text((invoicesList[position].status == Constants.PartialPaid) ? 'Partially Paid' : 'Not Paid', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, fontWeight: FontWeight.w600, color: Color(0xFFF91616))),  
+                    child: Text((invoicesList[position].status == Constants.PartialPaid) ? 'Partially Paid' : 'Not Paid', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, fontWeight: FontWeight.w600, color: const Color(0xFFF91616))),  
                 )
                 : sizedBox(0),
 
@@ -799,11 +799,11 @@ sizedBox(8),
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(PhosphorIconsBold.currencyInr, size: 16, color: Colors.white),
-                  SizedBox(width: 4,),
+                  const Icon(PhosphorIconsBold.currencyInr, size: 16, color: Colors.white),
+                  const SizedBox(width: 4,),
                   Text('Update Credit' , style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyMedium, height: 1.5, color: Colors.white, fontWeight: FontWeight.bold ), overflow: TextOverflow.ellipsis, maxLines: 2, softWrap: true, ),
-                  SizedBox(width: 4,),
-                  Icon(PhosphorIconsBold.arrowRight, size: 16, color: Colors.white),
+                  const SizedBox(width: 4,),
+                  const Icon(PhosphorIconsBold.arrowRight, size: 16, color: Colors.white),
                 ]
               )
             ),

@@ -1,7 +1,8 @@
 import 'dart:ui';
 
+import 'package:anjanitek/modals/product_tag.dart';
 import 'package:anjanitek/pdf_view.dart';
-import 'package:anjanitek/products_listing.dart';
+import 'package:anjanitek/designs.dart';
 import 'package:anjanitek/showrooms.dart';
 import 'package:anjanitek/verify.dart';
 import 'dart:convert';
@@ -13,7 +14,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 class AnjaniTekApp1 extends StatefulWidget {
   @override
@@ -178,7 +178,8 @@ class AnjaniTekApp1State extends State<AnjaniTekApp1> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFFF36C31),
+        // backgroundColor: const Color(0xFFF36C31),
+        backgroundColor: const Color(0xFFFFFFFF),
         elevation: 0,
       // appBar: AppBar(
         // backgroundColor: Colors.green[900],
@@ -208,7 +209,8 @@ class AnjaniTekApp1State extends State<AnjaniTekApp1> {
                               ),
                         ],
               ),
-              child:
+              child: 
+        
                           const Text(
                             'Login',
                             style: TextStyle(
@@ -217,7 +219,7 @@ class AnjaniTekApp1State extends State<AnjaniTekApp1> {
                               color: Color(0xFFF36C31),
                             ),
                           ),
-                      //   ],
+                        // ],
                       ),
               // ),
             
@@ -245,7 +247,8 @@ class AnjaniTekApp1State extends State<AnjaniTekApp1> {
               //     end: Alignment.bottomRight,
               //   )
               // ),
-              color: Color(0xFFF36C31),
+              // color: Color(0xFFF36C31),
+              color: const Color(0xFFFFFFFF),
               width: double.infinity,
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -255,11 +258,25 @@ class AnjaniTekApp1State extends State<AnjaniTekApp1> {
                     
                     Image.asset('assets/anjani_logo1.webp', scale: 4,), 
                     sizedBox(4),
-                    Image.asset('assets/anjani_title_white.webp', scale: 1,), 
+                    Image.asset('assets/anjani_title1.webp', scale: 1,), 
                     sizedBox(24),
-                    Text('Crafting Elegance', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyLarge, color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24), ),
-                    sizedBox(8),
-                    Text('Our precise creations create an impressive space that sets a tranquil ambience!', textAlign: TextAlign.center, style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyLarge, color: Colors.white, fontWeight: FontWeight.w500, fontSize: 14), ),
+                    // ElevatedButton(
+                    //   style: ElevatedButton.styleFrom(
+                    //     backgroundColor: Color(0xFFFFFFFF), // Dark background color
+                        
+                    //     textStyle: TextStyle( fontFamily: 'Inter', fontSize: 18, fontWeight: FontWeight.bold, ),
+                    //     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                    //     shape: RoundedRectangleBorder(
+                    //       borderRadius: BorderRadius.circular(10),
+                    //     ),
+                    //     elevation: 5, // Shadow depth
+                    //   ),
+                    //   onPressed: () {},
+                    //   child: Text('Start Free Trial', style: TextStyle(color: Colors.black)),
+                    // ),
+                    // Text('Crafting Elegance', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyLarge, color: Colors.black, fontWeight: FontWeight.bold, fontSize: 24), ),
+                    // sizedBox(8),
+                    // Text('Our precise creations create an impressive space that sets a tranquil ambience!', textAlign: TextAlign.center, style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyLarge, color: Colors.black, fontWeight: FontWeight.w500, fontSize: 14), ),
                     
                     sizedBox(16),
                     // ElevatedButton(
@@ -279,7 +296,7 @@ class AnjaniTekApp1State extends State<AnjaniTekApp1> {
             sizedBox(16),
             InkWell(
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => ProductsListing()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const Designs()));
               },
             child: 
             Container(
@@ -301,7 +318,7 @@ class AnjaniTekApp1State extends State<AnjaniTekApp1> {
                     padding: const EdgeInsets.all(24),
                     color: Colors.white.withOpacity(0.1), // Translucent effect
                     child: const Text(
-                      "Browse products",
+                      "Browse Designs",
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -419,7 +436,7 @@ class AnjaniTekApp1State extends State<AnjaniTekApp1> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Browse catalogues', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyLarge, color: Colors.black45, fontWeight: FontWeight.w500, fontSize: 14), ),
+                  Text('Browse Designs', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyLarge, color: Colors.black45, fontWeight: FontWeight.w500, fontSize: 14), ),
                   
                   sizedBox(16),
 
@@ -890,30 +907,6 @@ class Catalogue {
     data['name']= name;
     data['imageUrl']= imageUrl;
     data['documentUrl']= documentUrl;
-    data['type']= type;
-    return data;
-  }
-}
-
-class ProductTag {
-  int? tagId;
-  String? name;
-  String? description;
-  String? type;
-
-  ProductTag({this.tagId, this.name, this.description, this.type});
-
-  ProductTag.fromJson(Map<String, dynamic> json): 
-  tagId = json['tagId'], 
-  name = json['name'], 
-  description = json['description'], 
-  type = json['type'];
-
-  Map<String, dynamic> toJson() {
-    Map<String, dynamic> data = new Map<String, dynamic>();
-    data['tagId']= tagId;
-    data['name']= name;
-    data['description']= description;
     data['type']= type;
     return data;
   }

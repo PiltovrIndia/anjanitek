@@ -386,8 +386,8 @@ class _NotificationsDealer2State extends State<NotificationsDealer2> with Ticker
         Map<String, String> queryParams = {};
 
         // API call
-        // print("${APIUrls.messaging}${APIUrls.pass}/0/$id/${chatMessage.receiver}/$sentAt/${Uri.encodeComponent(chatMessage.message!)}/0/-");
-        var result = await get(Uri.parse(APIUrls.getUrl("${APIUrls.messaging}${APIUrls.pass}/0/$id/${chatMessage.receiver}/$sentAt/${Uri.encodeComponent(chatMessage.message!)}/0/-", queryParams)), headers: {"Accept": "application/json"});
+        print("${APIUrls.messaging}${APIUrls.pass}/0.1/$id/${chatMessage.receiver}/$sentAt/${Uri.encodeComponent(chatMessage.message!)}/0/-/$role");
+        var result = await get(Uri.parse(APIUrls.getUrl("${APIUrls.messaging}${APIUrls.pass}/0.1/$id/${chatMessage.receiver}/$sentAt/${Uri.encodeComponent(chatMessage.message!)}/0/-/$role", queryParams)), headers: {"Accept": "application/json"});
         // print(result.body);
       
       // get the result body which is JSON
@@ -447,7 +447,7 @@ class _NotificationsDealer2State extends State<NotificationsDealer2> with Ticker
       }
   }
 void _scrollToBottom() {
-    scrollController!.animateTo(scrollController!.position.maxScrollExtent, duration: Duration(milliseconds: 300), curve: Curves.easeOut);
+    scrollController!.animateTo(scrollController!.position.maxScrollExtent, duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
   }
 
   // detect scroll to end and load more items
@@ -482,53 +482,6 @@ void _scrollToBottom() {
     });
   }
 
-
-// Function to differentiate and decode
-  String decodeServerText(String text) {
-    try {
-      // Check if the string is URL-encoded by comparing with decoded
-      String decoded = Uri.encodeComponent(text);
-      if (decoded != text) {
-        return utf8.decode(text.codeUnits);
-        // return decoded;
-      } else {
-        // If not URL-encoded, try to decode using UTF-8
-        return decoded;
-        // return utf8.decode(text.codeUnits);
-      }
-    } catch (e) {
-      // If decoding fails, return the original text
-      return text;
-    }
-  }
-
-  // Regular expression to find URLs
-  final RegExp urlRegExp = RegExp(
-    r'(http|https):\/\/([\w\-]+\.)+[\w\-]+(\/[\w\-\.\/?%&=]*)?',
-    caseSensitive: false,
-  );
-
-  // Function to extract URLs and separate them from the text
-  String extractUrls(String text) {
-    // Find all URLs in the input text
-    Iterable<RegExpMatch> matches = urlRegExp.allMatches(text);
-
-    // Extract URLs and remove them from the text
-    StringBuffer urlsBuffer = StringBuffer();
-    String modifiedText = text;
-
-    for (var match in matches) {
-      urlsBuffer.write(match.group(0)! + '\n'); // Add URLs to the buffer
-      modifiedText = modifiedText.replaceAll(match.group(0)!, ''); // Remove URLs from text
-    }
-
-    // setState(() {
-    //   extractedUrls = urlsBuffer.toString().trim(); // Store the extracted URLs
-    //   remainingText = modifiedText.trim(); // Store the remaining text
-    // });
-
-    return urlsBuffer.toString().trim(); // Store the extracted URLs
-  }
 
 
   @override
@@ -683,7 +636,7 @@ void _scrollToBottom() {
                 SafeArea(
 
                 child: Container(
-                    padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
+                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                     child:
                         Column(
 
@@ -735,7 +688,7 @@ void _scrollToBottom() {
                                                   child:
                                                 Container(
                                                       // margin: EdgeInsets.fromLTRB(0,4,0,4),
-                                                      padding: EdgeInsets.all(8),
+                                                      padding: const EdgeInsets.all(8),
                                                       // decoration: BoxDecoration(
                                                       //   color: (storedNotifications[index].sender == id) ? Color.fromARGB(255, 232, 244, 239) : Color(0xFFF9F9F9),
                                                       //   borderRadius: const BorderRadius.all(Radius.circular(24)),
@@ -763,19 +716,19 @@ void _scrollToBottom() {
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Icon(PhosphorIconsRegular.chatsTeardrop, color: Color(0xFFAAAAAA), size: 32, ),
+                                    const Icon(PhosphorIconsRegular.chatsTeardrop, color: Color(0xFFAAAAAA), size: 32, ),
                                     sizedBox(8),
-                                    Text('No messages yet!'),
+                                    const Text('No messages yet!'),
                                   ],
                                 )
                               )
                             ),
                             
                             // loader while fetching data
-                            refreshCheckProgress? AppProgress(height: 30, width: 30,) : new SizedBox(height: 0,),
+                            refreshCheckProgress? const AppProgress(height: 30, width: 30,) : new SizedBox(height: 0,),
                             
                           Container(
-                              padding: EdgeInsets.all(8),
+                              padding: const EdgeInsets.all(8),
                               child: 
                             Row(
                               children: <Widget>[
@@ -795,7 +748,7 @@ void _scrollToBottom() {
                                         hintStyle: GoogleFonts.dmSans(textStyle: Theme.of(context).textTheme.bodyLarge),
                                         counterText: '',         
                                           hintText: 'Type here...',          
-                                          contentPadding: EdgeInsets.fromLTRB(12, 8, 12, 8),
+                                          contentPadding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
                                           focusedBorder: OutlineInputBorder(
                                             borderRadius: BorderRadius.circular(24),
                                             borderSide: const BorderSide(
@@ -817,23 +770,23 @@ void _scrollToBottom() {
                                   
                                 ),
                                 isLoading ?
-                                AppProgress(height: 24, width: 24)
+                                const AppProgress(height: 24, width: 24)
                                 :
                                 InkWell(
                                     // onTap: () => createSocketMessage(),
                                     onTap: () => createChat(),
                                   child: Container(
-                                    padding: EdgeInsets.fromLTRB(16, 8, 14, 8),
+                                    padding: const EdgeInsets.fromLTRB(16, 8, 14, 8),
                                     
                                     decoration: BoxDecoration(
                                         // color: Palette.blue,
-                                        border: Border.all(color: Color(0x336302E5)),
+                                        border: Border.all(color: const Color(0x336302E5)),
                                         color: Colors.white,
                                         shape: BoxShape.circle,
                                       ),
                                     
                                       alignment: Alignment.center,
-                                      child: Icon(PhosphorIconsFill.paperPlaneRight, color: Color(0xFF06A467), size: 24, ),
+                                      child: const Icon(PhosphorIconsFill.paperPlaneRight, color: Color(0xFF06A467), size: 24, ),
                                   ),
 
                                 )
@@ -880,10 +833,10 @@ Widget NotificationsCard(int position){
       Text('You' , style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, color: Colors.black45, fontWeight: FontWeight.w500) ),
       
       Container(
-          margin: EdgeInsets.fromLTRB(0,6,0,6),
-          padding: EdgeInsets.fromLTRB(16,8,16,8),
+          margin: const EdgeInsets.fromLTRB(0,6,0,6),
+          padding: const EdgeInsets.fromLTRB(16,8,16,8),
           decoration: BoxDecoration(
-            color: (storedNotifications[position].sender == id) ? Color.fromARGB(255, 232, 244, 239) : Color(0xFFF9F9F9),
+            color: (storedNotifications[position].sender == id) ? const Color.fromARGB(255, 232, 244, 239) : const Color(0xFFF9F9F9),
             borderRadius: const BorderRadius.all(Radius.circular(24)),
             // border: Border.all(
             //           color: Colors.black12, // Set the color of the border here
@@ -915,7 +868,7 @@ Widget NotificationsCard(int position){
             mainAxisAlignment: (storedNotifications[position].sender == id) ?  MainAxisAlignment.end : MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Icon(PhosphorIconsRegular.link, color: Colors.blueAccent, size: 24,),
+              const Icon(PhosphorIconsRegular.link, color: Colors.blueAccent, size: 24,),
               const SizedBox(width:4),
               // Text('Follow @AnjaniTek', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyLarge)),
               Text('${extractUrls(decodeServerText(storedNotifications[position].message!))}', textAlign: TextAlign.center, style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyLarge, color: Colors.blueAccent, fontWeight: FontWeight.bold, fontSize: 14), overflow: TextOverflow.ellipsis, maxLines: 2, softWrap: true, ),
@@ -935,16 +888,16 @@ Widget NotificationsCard(int position){
         children: [
           (storedNotifications[position].sender != id) ? Text('$mapName' , style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, color: Colors.black45, fontWeight: FontWeight.w500) ) :
       Text('You' , style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, color: Colors.black45, fontWeight: FontWeight.w500) ),
-      SizedBox(width:4),
+      const SizedBox(width:4),
           Text(DateFormat('• d-MMM hh:mm a', 'en_US').format(getDate(storedNotifications[position].sentAt!)) , style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, fontSize: 10, color: Colors.black45, fontWeight: FontWeight.w500) ),
           // Text(DateFormat('• d-MMM-y', 'en_US').format(getDate(storedNotifications[position].sentAt!)) , style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, fontSize: 10, color: Colors.black45, fontWeight: FontWeight.w500) ),
           // Text(storedNotifications[position].sender! , style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, color: Colors.black45, fontWeight: FontWeight.w500) ),
-          SizedBox(width:8),
+          const SizedBox(width:8),
           
           (storedNotifications[position].sender != id) ? sizedBox(0) :
           (storedNotifications[position].seen == 0) ? 
-          Icon(PhosphorIconsBold.check, size: 16, color: Color(0xFF008060)) :
-          Icon(PhosphorIconsBold.checks, size: 16, color: Color(0xFF999999)),
+          const Icon(PhosphorIconsBold.check, size: 16, color: Color(0xFF008060)) :
+          const Icon(PhosphorIconsBold.checks, size: 16, color: Color(0xFF999999)),
           // sizedBox(8),
         ],
       )

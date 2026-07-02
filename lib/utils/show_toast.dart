@@ -71,7 +71,7 @@ void showToast(BuildContext context, String message, String type){
   SnackBar(
     //  margin: const EdgeInsets.all(16.0),
       // padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),                 
-    backgroundColor: Colors.white.withOpacity(0.1),
+    backgroundColor: Colors.white10,
     // backgroundColor: Palette.black.withOpacity(0),
     // width: 300,
     // backgroundColor: Theme.of(context).cardColor,
@@ -92,7 +92,7 @@ void showToast(BuildContext context, String message, String type){
           padding: const EdgeInsets.fromLTRB(8,8,16,8),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(25),
-            color: Theme.of(context).cardColor,
+            color: Colors.white,
             border: Border.all(
               color: Colors.white,
               width: 1,
@@ -109,7 +109,7 @@ void showToast(BuildContext context, String message, String type){
               (type == Constants.error) ?
               PhosphorIcon(PhosphorIconsBold.xCircle, color: Colors.red)
               :
-              PhosphorIcon(PhosphorIconsBold.warningCircle, color: Colors.yellow),
+              PhosphorIcon(PhosphorIconsBold.warningCircle, color: Colors.orange),
               const SizedBox(width: 8),
               Flexible(child:       
                 Text(message, style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyLarge,)),),

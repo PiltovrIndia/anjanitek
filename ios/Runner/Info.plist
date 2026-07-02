@@ -2,6 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We require access to your media for letting you upload payment proofs to us.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>We require access to your camera for letting you upload payment proofs to us.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>We require access to your camera for letting you upload payment proofs to us.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>We require your location to understand where you logged in from to better understand about your profile.</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>

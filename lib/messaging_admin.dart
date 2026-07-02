@@ -4,7 +4,7 @@ import 'package:anjanitek/home.dart';
 import 'package:anjanitek/modals/dealers.dart';
 import 'package:anjanitek/utils/app_header.dart';
 import 'package:anjanitek/utils/show_toast.dart';
-import 'package:device_uuid/device_uuid.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -45,13 +45,12 @@ class _MessagingAdminState extends State<MessagingAdmin> with TickerProviderStat
   bool isLoading = false;
   bool optSent=false, verifyOTPLoading = false;
   late SharedPreferences preferences;
-  String notificationMessage='', adminId='';
+  String notificationMessage='', adminId='', role='';
   Users? user;
   Dealers? dealer;
 
   DateTime today = DateTime.now();
-  String _uuid = 'Unknown';
-  final _deviceUuidPlugin = DeviceUuid();
+  
   late SharedPreferences prefs;
   
 
@@ -112,7 +111,7 @@ class _MessagingAdminState extends State<MessagingAdmin> with TickerProviderStat
           // name = prefs.get(Constants.name) as String;
           adminId = prefs.get(Constants.id) as String;
           // email = prefs.get(Constants.email) as String;
-          // role = prefs.get(Constants.role) as String;
+          role = prefs.get(Constants.role) as String;
           // mobile = prefs.get(Constants.mobile) as String;
           // userImage = prefs.get(Constants.userImage) as String;
           // gcm_regId = prefs.get(Constants.gcmRegId) as String;
@@ -145,7 +144,7 @@ class _MessagingAdminState extends State<MessagingAdmin> with TickerProviderStat
       // pass, mobile, OTP, deviceId, loginTime
       // print("${APIUrls.submitPayment}${APIUrls.pass}/${notificationMessage.trim()}/$verifyOTP/$_uuid/SMART/${DateFormat('yyyy-MM-dd HH:mm:ss', 'en_US').format(today)}");
       // print("${APIUrls.messaging}${APIUrls.pass}/0/$adminId/$sendTo/${DateFormat('yyyy-MM-dd HH:mm:ss', 'en_US').format(DateTime.now())}/${notificationMessage.trim()}/0/-");
-      var result = await get(Uri.parse(APIUrls.getUrl("${APIUrls.messaging}${APIUrls.pass}/0/$adminId/$sendTo/${DateFormat('yyyy-MM-dd HH:mm:ss', 'en_US').format(DateTime.now())}/${notificationMessage.trim()}/0/-", queryParams)), headers: {"Accept": "application/json"});
+      var result = await get(Uri.parse(APIUrls.getUrl("${APIUrls.messaging}${APIUrls.pass}/0/$adminId/$sendTo/${DateFormat('yyyy-MM-dd HH:mm:ss', 'en_US').format(DateTime.now())}/${notificationMessage.trim()}/0/-/$role", queryParams)), headers: {"Accept": "application/json"});
       
       // Decode the JSON string into a Map using the jsonDecode function
       Map<String, dynamic> jsonObject = jsonDecode(result.body);
@@ -278,7 +277,7 @@ class _MessagingAdminState extends State<MessagingAdmin> with TickerProviderStat
                           // Image.asset('assets/anjani_title.webp', scale: 2,), 
                           AppHeader('Invoices', '', 1),
                           sizedBox(24),
-                          Text('Broadcast Message', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyLarge, fontSize: 20, fontWeight: FontWeight.bold, color:Color(0xFF008060)), ),
+                          Text('Broadcast Message', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyLarge, fontSize: 20, fontWeight: FontWeight.bold, color:const Color(0xFF008060)), ),
                           sizedBox(4),
                           Text('to', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, fontWeight: FontWeight.bold), ),
                           sizedBox(4),
@@ -304,13 +303,13 @@ class _MessagingAdminState extends State<MessagingAdmin> with TickerProviderStat
                               // textCapitalization: TextCapitalization.characters,
                               decoration: InputDecoration(
                                 filled: true,
-                                fillColor: Color(0xFFF5F5F5),
+                                fillColor: const Color(0xFFF5F5F5),
                                 focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Color(0xFFE5E5E5)),
+                                borderSide: const BorderSide(color: Color(0xFFE5E5E5)),
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Color(0xFFE5E5E5)),
+                                borderSide: const BorderSide(color: Color(0xFFE5E5E5)),
                                 borderRadius: BorderRadius.circular(8),
                               ),
                                 hintText: 'Enter message',
@@ -358,7 +357,7 @@ class _MessagingAdminState extends State<MessagingAdmin> with TickerProviderStat
                                   // show Sign in button
                                   (isLoading) ? sizedBox(0) : MaterialButton(
                                         padding: const EdgeInsets.fromLTRB(18.0, 12.0, 18.0, 12.0),
-                                        color: Color(0xFF008060),
+                                        color: const Color(0xFF008060),
                                         splashColor: Colors.black38,
                                         colorBrightness: Brightness.dark,
                                         elevation: 2,
@@ -395,7 +394,7 @@ class _MessagingAdminState extends State<MessagingAdmin> with TickerProviderStat
                                   // show Sign in button
                                   (isLoading) ? sizedBox(0) : MaterialButton(
                                         padding: const EdgeInsets.fromLTRB(18.0, 12.0, 18.0, 12.0),
-                                        color: Color(0xFFD4D4D4),
+                                        color: const Color(0xFFD4D4D4),
                                         splashColor: Colors.black38,
                                         colorBrightness: Brightness.dark,
                                         elevation: 2,

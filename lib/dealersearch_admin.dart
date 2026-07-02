@@ -286,7 +286,7 @@ class _DealerSearchState extends State<DealerSearch> {
            Container(
                   child: 
                     Container(
-                      padding: EdgeInsets.fromLTRB(8, 0, 0, 8),
+                      padding: const EdgeInsets.fromLTRB(8, 0, 0, 8),
                       child: 
                   Wrap(
                     direction: Axis.horizontal,
@@ -308,8 +308,8 @@ class _DealerSearchState extends State<DealerSearch> {
                             Radio(
                               visualDensity: VisualDensity.compact,
                               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                              activeColor: Color(0xFF008160),
-                              fillColor: MaterialStateProperty.all(Color(0xFF008160)),
+                              activeColor: const Color(0xFF008160),
+                              fillColor: MaterialStateProperty.all(const Color(0xFF008160)),
                               value: 1,
                               groupValue: _selectedValue,
                               onChanged: (value) {
@@ -339,8 +339,8 @@ class _DealerSearchState extends State<DealerSearch> {
                             Radio(
                               visualDensity: VisualDensity.compact,
                               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                              activeColor: Color(0xFF008160),
-                              fillColor: MaterialStateProperty.all(Color(0xFF008160)),
+                              activeColor: const Color(0xFF008160),
+                              fillColor: MaterialStateProperty.all(const Color(0xFF008160)),
                               value: 2,
                               groupValue: _selectedValue,
                               onChanged: (value) {
@@ -382,11 +382,11 @@ class _DealerSearchState extends State<DealerSearch> {
                             textInputAction: TextInputAction.search,
                             style: const TextStyle(fontSize: 14.0,),
                             decoration: InputDecoration(
-                              fillColor: Color(0xFFE6F2EF),
+                              fillColor: const Color(0xFFE6F2EF),
                               filled: true,
                               contentPadding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
                               suffixIcon: IconButton(
-                                icon: Icon(PhosphorIconsBold.magnifyingGlass, color: Color(0xFF008160), ),
+                                icon: const Icon(PhosphorIconsBold.magnifyingGlass, color: Color(0xFF008160), ),
                                 onPressed: () => {
                                   // either search icon can be clicked or search button in the keyboard
                                   if (searchTextController.text.isNotEmpty) {
@@ -408,7 +408,7 @@ class _DealerSearchState extends State<DealerSearch> {
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8.0),
-                                borderSide: BorderSide(color: Color(0xFF008160), width: 1.5),
+                                borderSide: const BorderSide(color: Color(0xFF008160), width: 1.5),
                               ),
                             ),
                               onSubmitted: (value) {
@@ -469,14 +469,14 @@ class _DealerSearchState extends State<DealerSearch> {
                           // loader while fetching data
                           // isLoading? AppProgress(height: 30, width: 30,) : new SizedBox(height: 0,),
                           Container(
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                                 color: Colors.black12,
                                 shape: BoxShape.circle,
                               ),
                             width: 64,
                             height: 64,
                               alignment: Alignment.center,
-                              child: Icon(PhosphorIconsRegular.userFocus, color: Colors.black38, size: 48,),
+                              child: const Icon(PhosphorIconsRegular.userFocus, color: Colors.black38, size: 48,),
                           ),
                         sizedBox(8),
                         
@@ -545,10 +545,10 @@ Widget userItemCard(int position, BuildContext context1){
     decoration: BoxDecoration(
       color: Colors.white,
       borderRadius: BorderRadius.circular(16),
-      boxShadow: [
+      boxShadow: const [
         BoxShadow(
           color: Colors.black12,
-          offset: const Offset(0.0, 0.0),
+          offset: Offset(0.0, 0.0),
           blurRadius: 24.0,
           spreadRadius: 0.3,
         ),
@@ -578,7 +578,7 @@ Widget userItemCard(int position, BuildContext context1){
                           //child: list[position].mediaCount == 0 ? Image.network(list[position].userImage) : Text('KP'), 
                           //child: list[position].mediaCount == 0 ? Image.network('https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png') : styledText(getAcronym(list[position].name), Constants.header3, Constants.lightbg), 
                           
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             // borderRadius: BorderRadius.circular(8),
                             shape: BoxShape.circle, 
                             color: Colors.black12),
@@ -605,8 +605,8 @@ Widget userItemCard(int position, BuildContext context1){
 
                             Expanded(
                             child: Container(
-                              padding: EdgeInsets.fromLTRB(16, 2, 8, 0),
-                            decoration: BoxDecoration(),
+                              padding: const EdgeInsets.fromLTRB(16, 2, 8, 0),
+                            decoration: const BoxDecoration(),
                             child: Column(
                                       mainAxisAlignment: MainAxisAlignment.start,
                                       crossAxisAlignment: CrossAxisAlignment.start,

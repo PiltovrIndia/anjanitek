@@ -13,7 +13,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart';
-import 'package:provider/provider.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:anjanitek/database_internal.dart';
 import 'package:anjanitek/modals/users.dart';
@@ -314,7 +314,7 @@ class _MessageDetailState extends State<MessageDetail> with TickerProviderStateM
 
         // API call
         // print("${APIUrls.messaging}${APIUrls.pass}/0/${chatMessage.sender}/${chatMessage.receiver}/$sentAt/${Uri.encodeComponent(chatMessage.message!)}/0/-");
-        var result = await get(Uri.parse(APIUrls.getUrl("${APIUrls.messaging}${APIUrls.pass}/0/${chatMessage.sender}/${chatMessage.receiver}/$sentAt/${Uri.encodeComponent(chatMessage.message!)}/0/-", queryParams)), headers: {"Accept": "application/json"});
+        var result = await get(Uri.parse(APIUrls.getUrl("${APIUrls.messaging}${APIUrls.pass}/0/${chatMessage.sender}/${chatMessage.receiver}/$sentAt/${Uri.encodeComponent(chatMessage.message!)}/0/-/$role", queryParams)), headers: {"Accept": "application/json"});
         // print(result.body);
       
       // get the result body which is JSON
@@ -442,7 +442,7 @@ class _MessageDetailState extends State<MessageDetail> with TickerProviderStateM
 
   
   void _scrollToBottom() {
-    scrollController!.animateTo(scrollController!.position.maxScrollExtent, duration: Duration(milliseconds: 300), curve: Curves.easeOut);
+    scrollController!.animateTo(scrollController!.position.maxScrollExtent, duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
   }
 
   // detect scroll to end and load more items
@@ -673,7 +673,7 @@ class _MessageDetailState extends State<MessageDetail> with TickerProviderStateM
                 SafeArea(
 
                 child: Container(
-                    padding: EdgeInsets.fromLTRB(16,0,16,16),
+                    padding: const EdgeInsets.fromLTRB(16,0,16,16),
                     child:
                         Column(
 
@@ -695,9 +695,9 @@ class _MessageDetailState extends State<MessageDetail> with TickerProviderStateM
                                           Text('Conversation between', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyLarge, color: Colors.black54, fontWeight: FontWeight.w500, fontSize: 14), ),
                                           
                                 Container(
-                                      margin: EdgeInsets.fromLTRB(0,6,0,6),
-                                      padding: EdgeInsets.fromLTRB(16,8,16,8),
-                                      decoration: BoxDecoration(
+                                      margin: const EdgeInsets.fromLTRB(0,6,0,6),
+                                      padding: const EdgeInsets.fromLTRB(16,8,16,8),
+                                      decoration: const BoxDecoration(
                                         color: Color(0xFFF5F5F5),
                                         borderRadius: BorderRadius.all(Radius.circular(24)),
                                         // border: Border.all(
@@ -715,14 +715,14 @@ class _MessageDetailState extends State<MessageDetail> with TickerProviderStateM
                                       ),
                                 child: Row(
                                   children: [
-                                    Column(
+                                    const Column(
                                       children: [
                                         // Icon(PhosphorIconsBold.dotOutline, color: Color(0xFF06A467)),
                                         // Icon(PhosphorIconsBold.dotOutline, color: Color(0xFF06A467)),
                                         Icon(PhosphorIconsRegular.chats, color: Colors.black45),
                                       ],
                                     ),
-                                    SizedBox(width: 8,),
+                                    const SizedBox(width: 8,),
                                     Flexible(child: 
                                       Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -765,7 +765,7 @@ class _MessageDetailState extends State<MessageDetail> with TickerProviderStateM
                                                   child:
                                                 Container(
                                                       // margin: EdgeInsets.fromLTRB(0,6,0,6),
-                                                      padding: EdgeInsets.all(8),
+                                                      padding: const EdgeInsets.all(8),
                                                       // decoration: BoxDecoration(
                                                       //   color: (storedNotifications[index].sender == widget.sender) ?  Color.fromARGB(255, 232, 244, 239) : Color(0xFFF9F9F9),
                                                       //   // color: Color(0xFFF9F9F9),
@@ -795,7 +795,7 @@ class _MessageDetailState extends State<MessageDetail> with TickerProviderStateM
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Icon(PhosphorIconsRegular.chatsTeardrop, color: Color(0xFFAAAAAA), size: 32, ),
+                                    const Icon(PhosphorIconsRegular.chatsTeardrop, color: Color(0xFFAAAAAA), size: 32, ),
                                     sizedBox(8),
                                     Text('No messages yet!', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyLarge, color: Colors.black54, fontWeight: FontWeight.w500, fontSize: 14), ),
                                   ],
@@ -804,7 +804,7 @@ class _MessageDetailState extends State<MessageDetail> with TickerProviderStateM
                             ),
                             
                             // loader while fetching data
-                            refreshCheckProgress? AppProgress(height: 30, width: 30,) : new SizedBox(height: 0,),
+                            refreshCheckProgress? const AppProgress(height: 30, width: 30,) : new SizedBox(height: 0,),
                           
                           // Sending message can be enabled only between the direct reports.
                           // For example, A SalesManager can send message to a dealer if it is direct report
@@ -812,7 +812,7 @@ class _MessageDetailState extends State<MessageDetail> with TickerProviderStateM
                           (widget.sender == id || role.toLowerCase() == Constants.superAdmin.toLowerCase() || role.toLowerCase() == Constants.globalAdmin.toLowerCase()) ?
                           // (role.toLowerCase() == Constants.superAdmin.toLowerCase()) ? 
                           Container(
-                              padding: EdgeInsets.fromLTRB(0,8,0,8),
+                              padding: const EdgeInsets.fromLTRB(0,8,0,8),
                               child: 
                             Row(
                               children: <Widget>[
@@ -832,7 +832,7 @@ class _MessageDetailState extends State<MessageDetail> with TickerProviderStateM
                                         hintStyle: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyLarge),
                                         counterText: '',         
                                           hintText: 'Type here...',          
-                                          contentPadding: EdgeInsets.fromLTRB(12, 8, 12, 8),
+                                          contentPadding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
                                           focusedBorder: OutlineInputBorder(
                                             borderRadius: BorderRadius.circular(24),
                                             borderSide: const BorderSide(
@@ -854,23 +854,23 @@ class _MessageDetailState extends State<MessageDetail> with TickerProviderStateM
                                   
                                 ),
                                 isLoading ?
-                                AppProgress(height: 24, width: 24)
+                                const AppProgress(height: 24, width: 24)
                                 :
                                 InkWell(
                                     // onTap: () => createSocketMessage(),
                                     onTap: () => createChat(),
                                   child: Container(
-                                    padding: EdgeInsets.fromLTRB(16, 8, 14, 8),
+                                    padding: const EdgeInsets.fromLTRB(16, 8, 14, 8),
                                     
                                     decoration: BoxDecoration(
                                         // color: Palette.blue,
-                                        border: Border.all(color: Color(0x336302E5)),
+                                        border: Border.all(color: const Color(0x336302E5)),
                                         color: Colors.white,
                                         shape: BoxShape.circle,
                                       ),
                                     
                                       alignment: Alignment.center,
-                                      child: Icon(PhosphorIconsFill.paperPlaneRight, color: Color(0xFF06A467), size: 24, ),
+                                      child: const Icon(PhosphorIconsFill.paperPlaneRight, color: Color(0xFF06A467), size: 24, ),
                                   ),
 
                                 )
@@ -918,10 +918,10 @@ Widget NotificationsCard(int position){
       // : Text(widget.receiverName , style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, color: Colors.black45, fontWeight: FontWeight.w500) ),
 
       Container(
-          margin: EdgeInsets.fromLTRB(0,2,0,2),
-          padding: EdgeInsets.fromLTRB(16,8,16,8),
+          margin: const EdgeInsets.fromLTRB(0,2,0,2),
+          padding: const EdgeInsets.fromLTRB(16,8,16,8),
           decoration: BoxDecoration(
-            color: (storedNotifications[position].sender == id) ? Color.fromARGB(255, 232, 244, 239) : Color(0xFFF9F9F9),
+            color: (storedNotifications[position].sender == id) ? const Color.fromARGB(255, 232, 244, 239) : const Color(0xFFF9F9F9),
             borderRadius: const BorderRadius.all(Radius.circular(24)),
             // border: Border.all(
             //           color: Colors.black12, // Set the color of the border here
@@ -951,7 +951,7 @@ Widget NotificationsCard(int position){
             mainAxisAlignment: (storedNotifications[position].sender == widget.sender || storedNotifications[position].receiver == 'All') ?  MainAxisAlignment.end : MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Icon(PhosphorIconsRegular.link, color: Colors.blueAccent, size: 24,),
+              const Icon(PhosphorIconsRegular.link, color: Colors.blueAccent, size: 24,),
               const SizedBox(width:4),
               // Text('Follow @AnjaniTek', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyLarge)),
               Text('${extractUrls(decodeServerText(storedNotifications[position].message!))}', textAlign: TextAlign.center, style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyLarge, color: Colors.blueAccent, fontWeight: FontWeight.bold, fontSize: 14), overflow: TextOverflow.ellipsis, maxLines: 2, softWrap: true, ),
@@ -974,17 +974,17 @@ Widget NotificationsCard(int position){
           Text((widget.senderName == name) ? 'You' : widget.senderName , style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, color: Colors.black38, fontWeight: FontWeight.w500) )
           : Text(widget.receiverName , style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, color: Colors.black38, fontWeight: FontWeight.w500) ),
       
-          SizedBox(width:4),
+          const SizedBox(width:4),
           Text(DateFormat('• d-MMM hh:mm a', 'en_US').format(getDate(storedNotifications[position].sentAt!)) , style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, color: Colors.black38, fontWeight: FontWeight.w500) ),
           // Text(DateFormat('• d-MMM-y', 'en_US').format(getDate(storedNotifications[position].sentAt!)) , style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, color: Colors.black38, fontWeight: FontWeight.w500) ),
           // Text(storedNotifications[position].sender! , style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, color: Colors.black45, fontWeight: FontWeight.w500) ),
-          SizedBox(width:8),
+          const SizedBox(width:8),
           
           // if the sender is not me and I am the sales executive, 
           
           (storedNotifications[position].seen == 0) ? 
-          Icon(PhosphorIconsBold.check, size: 16, color: Color(0xFF008060)) :
-          Icon(PhosphorIconsBold.checks, size: 16, color: Color(0xFF999999)),
+          const Icon(PhosphorIconsBold.check, size: 16, color: Color(0xFF008060)) :
+          const Icon(PhosphorIconsBold.checks, size: 16, color: Color(0xFF999999)),
           // // if the sender is not me and I am the sales executive, 
           // (storedNotifications[position].sender != id) ? sizedBox(0) :
           // (storedNotifications[position].seen == 0) ? 

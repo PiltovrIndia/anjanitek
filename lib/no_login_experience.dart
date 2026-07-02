@@ -10,7 +10,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 class AnjaniTekApp extends StatefulWidget {
   @override
@@ -104,7 +103,7 @@ class AnjaniTekAppState extends State<AnjaniTekApp> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFFF36C31),
+        backgroundColor: const Color(0xFFF36C31),
         elevation: 0,
       // appBar: AppBar(
         // backgroundColor: Colors.green[900],
@@ -115,12 +114,12 @@ class AnjaniTekAppState extends State<AnjaniTekApp> {
           //   child: 
             InkWell(
                 onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => Verification()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const Verification()));
                 },
                 child: Container(
               
-              padding: EdgeInsets.fromLTRB(16,8,16,8),
-              margin: EdgeInsets.fromLTRB(16,8,16,8),
+              padding: const EdgeInsets.fromLTRB(16,8,16,8),
+              margin: const EdgeInsets.fromLTRB(16,8,16,8),
               // margin: EdgeInsets.all(8),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
@@ -139,7 +138,7 @@ class AnjaniTekAppState extends State<AnjaniTekApp> {
                 //         children: [
                 //           Icon(PhosphorIconsRegular.phone, size: 24, color: Colors.orange),
                 //           SizedBox(width: 8),
-                          Text(
+                          const Text(
                             'Login',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
@@ -168,7 +167,7 @@ class AnjaniTekAppState extends State<AnjaniTekApp> {
         child: Column(
           children: [
             Container(
-              color: Color(0xFFF36C31),
+              color: const Color(0xFFF36C31),
               width: double.infinity,
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -204,7 +203,7 @@ class AnjaniTekAppState extends State<AnjaniTekApp> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Browse catalogues', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyLarge, color: Colors.black45, fontWeight: FontWeight.w500, fontSize: 14), ),
+                  Text('Browse Designs', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyLarge, color: Colors.black45, fontWeight: FontWeight.w500, fontSize: 14), ),
                   
                   sizedBox(16),
 
@@ -215,7 +214,7 @@ class AnjaniTekAppState extends State<AnjaniTekApp> {
                       children: [
                         // Icon(PhosphorIconsRegular.chatsTeardrop, color: Color(0xFFAAAAAA), size: 32, ),
                         // sizedBox(8),
-                        refreshCheckProgress? AppProgress(height: 30, width: 30,) : new SizedBox(height: 0,),
+                        refreshCheckProgress? const AppProgress(height: 30, width: 30,) : new SizedBox(height: 0,),
                         Text('Loading catagolues!', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyLarge, color: Colors.black54, fontWeight: FontWeight.w500, fontSize: 14), ),
                         
                       ],
@@ -224,8 +223,8 @@ class AnjaniTekAppState extends State<AnjaniTekApp> {
                   : 
                   GridView.builder(
                     shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       crossAxisSpacing: 16,
                       mainAxisSpacing: 16,
@@ -276,14 +275,14 @@ class AnjaniTekAppState extends State<AnjaniTekApp> {
                                       height: 240,
                                       decoration:  BoxDecoration(
                                         shape: BoxShape.rectangle,
-                                        borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
+                                        borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
                                         image: DecorationImage(
                                           fit: BoxFit.cover,
                                           image: NetworkImage(plant1!),
                                         ),
                                       ),
                                     ),
-                                  Positioned(top: 0, bottom: 0, left: 0, right: 0,
+                                  const Positioned(top: 0, bottom: 0, left: 0, right: 0,
                                     child: Center(
                                       child: Icon(PhosphorIconsFill.playCircle, size: 64, color: Colors.white),
                                     ),
@@ -341,14 +340,14 @@ class AnjaniTekAppState extends State<AnjaniTekApp> {
                                       height: 240,
                                       decoration:  BoxDecoration(
                                         shape: BoxShape.rectangle,
-                                        borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
+                                        borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
                                         image: DecorationImage(
                                           fit: BoxFit.cover,
                                           image: NetworkImage(plant2!),
                                         ),
                                       ),
                                     ),
-                                  Positioned(top: 0, bottom: 0, left: 0, right: 0,
+                                  const Positioned(top: 0, bottom: 0, left: 0, right: 0,
                                     child: Center(
                                       child: Icon(PhosphorIconsFill.playCircle, size: 64, color: Colors.white),
                                     ),
@@ -507,7 +506,7 @@ Widget productCard(int position){
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
                   image: DecorationImage(
                     image: NetworkImage(showCatalogues[position].imageUrl!),
                     fit: BoxFit.cover,

@@ -1,35 +1,27 @@
 import 'dart:convert';
-import 'dart:io';
 import 'dart:ui';
 
-// import 'package:feather_icons_flutter/feather_icons_flutter.dart';
 import 'package:anjanitek/dealerinvoices_admin.dart';
 import 'package:anjanitek/message_detail.dart';
-import 'package:anjanitek/messaging_admin.dart';
 import 'package:anjanitek/modals/dealers.dart';
-import 'package:anjanitek/paymentupdate_admin.dart';
+import 'package:anjanitek/payments_list_dealer_admin.dart';
 import 'package:anjanitek/paymentupdate_admin1.dart';
+import 'package:anjanitek/targets_dealer_report.dart';
 import 'package:flutter/services.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:anjanitek/database_internal.dart';
 import 'package:anjanitek/modals/users.dart';
-// import 'package:anjanitek/profile_update.dart';
 import 'package:anjanitek/utils/api_urls.dart';
 import 'package:anjanitek/utils/app_header.dart';
 import 'package:anjanitek/utils/progress.dart';
 import 'package:anjanitek/utils/show_toast.dart';
 import 'package:anjanitek/utils/divider.dart';
-// import 'package:anjanitek/util/show_toast.dart';
 import 'package:anjanitek/utils/constants.dart' as Constants;
 import 'package:anjanitek/utils/utils.dart';
-import 'package:anjanitek/verify.dart';
 import 'package:http/http.dart' as http;
-import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 // this is dealer details screen using the selected dealer id
@@ -184,8 +176,8 @@ class _DealerDetailsState extends State<DealerDetails> with TickerProviderStateM
       SafeArea(
 
         child: SingleChildScrollView(
-      child: Container(
-        margin: EdgeInsets.fromLTRB(16, 0, 16, 16),
+      child: Container(color: Colors.white,
+        margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
         child:
       Column(
 
@@ -208,12 +200,32 @@ class _DealerDetailsState extends State<DealerDetails> with TickerProviderStateM
 Container(
   decoration: BoxDecoration(
                   // color: Theme.of(context).shadowColor,
-                  color: Color(0xFFE4F6F1),
+                  // color: Color(0xFFE4F6F1),
                   borderRadius: const BorderRadius.all(Radius.circular(24)),
                   border: Border.all(
                             color: Colors.black12, // Set the color of the border here
                             width: 1, // Set the width of the border here
                           ),
+                          gradient: const LinearGradient(
+                        colors: [
+                          Color(0xFF048563), // Dark blue
+                          Color(0xFF048563), // Dark blue
+                          Color.fromARGB(255, 10, 103, 78), 
+                           
+                          Color(0xFF0F4D3C), // Even lighter blue
+                          Color(0xFF012118),
+                        ],
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                      ),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black12, // Shadow color
+                          spreadRadius: 5, // How much the shadow spreads
+                          blurRadius: 20, // How blurred the shadow is
+                          offset: Offset(0, 10), // Offset in x, y direction
+                        ),
+                      ],
                   // boxShadow: const [
                   //   BoxShadow(
                   //     color: Colors.black12,
@@ -223,20 +235,20 @@ Container(
                   //   ),
                   // ]
                 ),
-                  padding: const EdgeInsets.fromLTRB(16, 32, 16, 16),
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
   child:
 Column(
   crossAxisAlignment: CrossAxisAlignment.center,
   children: [
     
-
+sizedBox(8),
               (dealerUser != null) ?
-              Text(dealerUser!.name!, style: GoogleFonts.montserrat(textStyle: Theme.of(context).textTheme.headlineSmall, fontWeight: FontWeight.bold), )
+              Text(dealerUser!.name!, style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyLarge, fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white), )
               : sizedBox(0),
-              sizedBox(32),
-              Text('Dealer of', style: GoogleFonts.montserrat(textStyle: Theme.of(context).textTheme.bodyLarge, color: Colors.black87), ),
-              Text(dealerUser!.mapName!, style: GoogleFonts.montserrat(textStyle: Theme.of(context).textTheme.bodyLarge, fontWeight: FontWeight.bold,color: Colors.black87), ),
-              sizedBox(32),
+              sizedBox(8),
+              Text('Dealer of', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyLarge, color: Colors.white70), ),
+              Text(dealerUser!.mapName!, style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyLarge, fontWeight: FontWeight.bold,color: Colors.white), ),
+              sizedBox(24),
 
 
               ScaleTransition(
@@ -264,10 +276,11 @@ Column(
                               Container( 
                                 decoration: BoxDecoration(
                                   // color: Theme.of(context).shadowColor,
-                                  color: Color(0xFF048563),
+                                  // color: Color(0xFF048563),
+                                  color: const Color(0xFFFFFFFF),
                                   borderRadius: const BorderRadius.all(Radius.circular(16)),
                                   border: Border.all(
-                                            color: Color(0xFF048563), // Set the color of the border here
+                                            color: const Color(0xFF048563), // Set the color of the border here
                                             width: 1, // Set the width of the border here
                                           ),
                                   boxShadow: const [
@@ -283,15 +296,15 @@ Column(
                                 ),
                                 
                                 padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-                                margin: (role.toLowerCase() == Constants.superAdmin.toLowerCase()) ? EdgeInsets.fromLTRB(0, 0, 8, 0) : EdgeInsets.all(0),
+                                margin: (role.toLowerCase() == Constants.superAdmin.toLowerCase()) ? const EdgeInsets.fromLTRB(0, 0, 8, 0) : const EdgeInsets.all(0),
                                 child: Column(
                                     // crossAxisAlignment: CrossAxisAlignment.stretch,
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           mainAxisSize: MainAxisSize.max,
                                           children: [
-                                            const Icon(PhosphorIconsBold.currencyInr, size: 24,color: Color(0xFFFFFFFF),),
+                                            const Icon(PhosphorIconsBold.plus, size: 24,color: Color(0xFF048563),),
                                             sizedBox(8,),
-                                            Text('Update\nCredit', style: GoogleFonts.montserrat(textStyle: Theme.of(context).textTheme.bodyMedium, fontWeight: FontWeight.w600, color: Color(0xFFFFFFFF)), textAlign: TextAlign.center,),
+                                            Text('Update\nCredit', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, fontWeight: FontWeight.w600, color: const Color(0xFF048563)), textAlign: TextAlign.center,),
                                           ],
                                         ) 
                                 )
@@ -315,10 +328,10 @@ Column(
                                   Container( 
                                     decoration: BoxDecoration(
                                       // color: Theme.of(context).shadowColor,
-                                      color: Color(0xFF048563),
+                                      color: const Color(0xFFFFFFFF),
                                       borderRadius: const BorderRadius.all(Radius.circular(16)),
                                       border: Border.all(
-                                                color: Color(0xFF048563), // Set the color of the border here
+                                                color: const Color(0xFF048563), // Set the color of the border here
                                                 width: 1, // Set the width of the border here
                                               ),
                                       boxShadow: const [
@@ -336,9 +349,9 @@ Column(
                                               mainAxisAlignment: MainAxisAlignment.center,
                                               mainAxisSize: MainAxisSize.max,
                                               children: [
-                                                const Icon(PhosphorIconsBold.chatDots, size: 24,color: Color(0xFFFFFFFF),),
+                                                const Icon(PhosphorIconsBold.chatDots, size: 24,color: Color(0xFF048563),),
                                                 sizedBox(8,),
-                                                Text('View\nMessages', style: GoogleFonts.montserrat(textStyle: Theme.of(context).textTheme.bodyMedium, fontWeight: FontWeight.w600, color: Color(0xFFFFFFFF)), textAlign: TextAlign.center,),
+                                                Text('View\nMessages', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, fontWeight: FontWeight.w600, color: const Color(0xFF048563)), textAlign: TextAlign.center,),
                                                 // const Icon(PhosphorIconsRegular.notification, size: 24,color: Color(0xFF000000),),
                                                 // sizedBox(8,),
                                                 // Text('Send\nReminder', style: GoogleFonts.montserrat(textStyle: Theme.of(context).textTheme.bodyMedium, fontWeight: FontWeight.w600, color: Colors.black), textAlign: TextAlign.center,),
@@ -359,10 +372,10 @@ Column(
                                     Container( 
                                       decoration: BoxDecoration(
                                         // color: Theme.of(context).shadowColor,
-                                        color: Color(0xFF048563),
+                                        color: const Color(0xFFFFFFFF),
                                         borderRadius: const BorderRadius.all(Radius.circular(16)),
                                         border: Border.all(
-                                                  color: Color(0xFF048563), // Set the color of the border here
+                                                  color: const Color(0xFF048563), // Set the color of the border here
                                                   width: 1, // Set the width of the border here
                                                 ),
                                         boxShadow: const [
@@ -379,19 +392,97 @@ Column(
                                                 mainAxisAlignment: MainAxisAlignment.center,
                                                 mainAxisSize: MainAxisSize.max,
                                                 children: [
-                                                  const Icon(PhosphorIconsBold.receipt, size: 24,color: Color(0xFFFFFFFF),),
+                                                  const Icon(PhosphorIconsBold.receipt, size: 24,color: Color(0xFF048563),),
                                                   sizedBox(8,),
-                                                  Text('View\nInvoices', style: GoogleFonts.montserrat(textStyle: Theme.of(context).textTheme.bodyMedium, fontWeight: FontWeight.w600, color: Color(0xFFFFFFFF)), textAlign: TextAlign.center,),
+                                                  Text('View\nInvoices', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, fontWeight: FontWeight.w600, color: const Color(0xFF048563)), textAlign: TextAlign.center,),
                                                 ],
                                               ) 
                                     )
                                 )
                               ),
                               
+                              
+                              
                             ],
                           ),
                       ),
-
+                      sizedBox(8),
+                      InkWell(
+                        onTap: () => {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => PaymentsListOfDealer_Admin(dealer!)))
+                          // Navigator.push(context, MaterialPageRoute(builder: (context) => DealerInvoicesAdmin(dealerUser!)))
+                        },
+                        child: 
+                          Container( 
+                            decoration: BoxDecoration(
+                              // color: Theme.of(context).shadowColor,
+                              color: const Color(0xFFFFFFFF),
+                              borderRadius: const BorderRadius.all(Radius.circular(16)),
+                              border: Border.all(
+                                        color: const Color(0xFF048563), // Set the color of the border here
+                                        width: 1, // Set the width of the border here
+                                      ),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.black12,
+                                  offset: Offset(0.0, 0.0),
+                                  // blurRadius: 12.0,
+                                  spreadRadius: 0.3,
+                                ),
+                              ]
+                            ),
+                            padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+                            child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisSize: MainAxisSize.max,
+                                      spacing: 8,
+                                      children: [
+                                        const Icon(PhosphorIconsBold.currencyInr, size: 24,color: Color(0xFF048563),),
+                                        
+                                        Text('View Payments', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyMedium, fontWeight: FontWeight.w600, color: const Color(0xFF048563)), textAlign: TextAlign.center,),
+                                      ],
+                                    ) 
+                          )
+                      ),
+                      sizedBox(8),
+                      InkWell(
+                        onTap: () => {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => TargetsDealer(dealer!.dealerId!)))
+                          // Navigator.push(context, MaterialPageRoute(builder: (context) => DealerInvoicesAdmin(dealerUser!)))
+                        },
+                        child: 
+                          Container( 
+                            decoration: BoxDecoration(
+                              // color: Theme.of(context).shadowColor,
+                              color: const Color(0xFFFFFFFF),
+                              borderRadius: const BorderRadius.all(Radius.circular(16)),
+                              border: Border.all(
+                                        color: const Color(0xFF048563), // Set the color of the border here
+                                        width: 1, // Set the width of the border here
+                                      ),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.black12,
+                                  offset: Offset(0.0, 0.0),
+                                  // blurRadius: 12.0,
+                                  spreadRadius: 0.3,
+                                ),
+                              ]
+                            ),
+                            padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+                            child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisSize: MainAxisSize.max,
+                                      spacing: 8,
+                                      children: [
+                                        const Icon(PhosphorIconsBold.target, size: 24,color: Color(0xFF048563),),
+                                        
+                                        Text('View Targets Report', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyMedium, fontWeight: FontWeight.w600, color: const Color(0xFF048563)), textAlign: TextAlign.center,),
+                                      ],
+                                    ) 
+                          )
+                      )
+                              
   ],
 ),
 ),
@@ -554,7 +645,7 @@ Column(
               //   ),
               sizedBox(16),
 
-              refreshCheckProgress ? AppProgress(height: 32, width: 32) : sizedBox(0),
+              refreshCheckProgress ? const AppProgress(height: 32, width: 32) : sizedBox(0),
               
               ScaleTransition(scale: CurvedAnimation(
                                     parent: _controllerCards,
@@ -563,19 +654,25 @@ Column(
                                   child:
               Container( 
                 decoration: BoxDecoration(
-                  color: Color(0xFFF9F9F9),
+                  color: const Color(0xFFFFFFFF),
                   borderRadius: const BorderRadius.all(Radius.circular(24)),
                   border: Border.all(
                             color: Colors.black12, // Set the color of the border here
                             width: 1, // Set the width of the border here
                           ),
                   boxShadow: const [
+                    // BoxShadow(
+                    //   color: Colors.black12,
+                    //   offset: Offset(0.0, 0.0),
+                    //   // blurRadius: 12.0,
+                    //   spreadRadius: 0.3,
+                    // ),
                     BoxShadow(
-                      color: Colors.black12,
-                      offset: Offset(0.0, 0.0),
-                      // blurRadius: 12.0,
-                      spreadRadius: 0.3,
-                    ),
+                          color: Colors.black12,
+                          offset: Offset(0.0, 0.0),
+                          blurRadius: 24.0,
+                          spreadRadius: 0.3,
+                        ),
                   ]
                 ),
                 // margin: const EdgeInsets.fromLTRB(16, 0, 16, 8),
@@ -601,7 +698,7 @@ Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 
                                 children: [
-                                  Icon(PhosphorIconsRegular.phone, color: Colors.black, size: 24,),
+                                  const Icon(PhosphorIconsRegular.phone, color: Colors.black, size: 24,),
                                   const SizedBox(width:16),
                                   Expanded(child: 
                                     Column(
@@ -614,20 +711,38 @@ Column(
                                     ),
                                   ),
                                   ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color(0xFF048563), // Dark background color
+                                      foregroundColor: const Color(0xFFFFFFFF),
+                                      textStyle: const TextStyle( fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.bold ),
+                                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(24),
+                                      ),
+                                      elevation: 5, // Shadow depth
+                                    ),
                                     onPressed: () async {
                                       // Action to perform when the button is pressed
                                       String telephoneUrl = "tel:${dealerUser!.mobile}";
                                         await launchUrlString(telephoneUrl);
                                     },
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Color(0xFF048563),
-                                      foregroundColor: Color(0xFFFFFFFF),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(24.0),
-                                      ),
-                                    ),
-                                    child: Text('Call now'),
+                                    child: const Text('Call now', style: TextStyle(color: Colors.white)),
                                   ),
+                                  // ElevatedButton(
+                                  //   onPressed: () async {
+                                  //     // Action to perform when the button is pressed
+                                  //     String telephoneUrl = "tel:${dealerUser!.mobile}";
+                                  //       await launchUrlString(telephoneUrl);
+                                  //   },
+                                  //   style: ElevatedButton.styleFrom(
+                                  //     backgroundColor: Color(0xFF048563),
+                                  //     foregroundColor: Color(0xFFFFFFFF),
+                                  //     shape: RoundedRectangleBorder(
+                                  //       borderRadius: BorderRadius.circular(24.0),
+                                  //     ),
+                                  //   ),
+                                  //   child: Text('Call now'),
+                                  // ),
                                   
                                   // const SizedBox(width:8),
                                   // Container(
@@ -652,7 +767,7 @@ Column(
                         },
                         child: Row(
                             children: [
-                              Icon(PhosphorIconsRegular.at, color: Colors.black, size: 24),
+                              const Icon(PhosphorIconsRegular.at, color: Colors.black, size: 24),
                               const SizedBox(width:16),
                               Expanded(
                                 child: Column(
@@ -690,7 +805,7 @@ Column(
                                   child:
               Container(
                 decoration: BoxDecoration(
-                  color: Color(0xFFF9F9F9),
+                  color: const Color(0xFFFFFFFF),
                   borderRadius: const BorderRadius.all(Radius.circular(24)),
                   border: Border.all(
                             color: Colors.black12, // Set the color of the border here
@@ -698,18 +813,18 @@ Column(
                           ),
                   boxShadow: const [
                     BoxShadow(
-                      color: Colors.black12,
-                      offset: Offset(0.0, 0.0),
-                      // blurRadius: 12.0,
-                      spreadRadius: 0.3,
-                    ),
+                          color: Colors.black12,
+                          offset: Offset(0.0, 0.0),
+                          blurRadius: 24.0,
+                          spreadRadius: 0.3,
+                        ),
                   ]
                 ),
                 padding: const EdgeInsets.all(16),
                 child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(PhosphorIconsRegular.mapPin, color: Colors.black, size: 24,),
+                      const Icon(PhosphorIconsRegular.mapPin, color: Colors.black, size: 24,),
                       const SizedBox(width:16),
                       Expanded(
                                   child: 
@@ -744,7 +859,7 @@ Column(
             ],
           
           )
-          : Center(
+          : const Center(
             child: Column(
               children: [
                 Text('Loading...')
@@ -935,17 +1050,17 @@ Column(
                         children: [
                           Text('Disclaimer', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyMedium)),
                           Container(
-                            padding: EdgeInsets.all(8),
-                            decoration: BoxDecoration(
+                            padding: const EdgeInsets.all(8),
+                            decoration: const BoxDecoration(
                                 color: Colors.black12,
-                                borderRadius: const BorderRadius.all(Radius.circular(20)),
+                                borderRadius: BorderRadius.all(Radius.circular(20)),
                             ),
                             child: 
                             InkWell(
                               onTap: () => {
                                     Navigator.pop(context)
                                     },
-                              child: Icon(PhosphorIconsBold.x, color: Colors.black54, size: 24,),
+                              child: const Icon(PhosphorIconsBold.x, color: Colors.black54, size: 24,),
                             ),
                           ),
                         ],

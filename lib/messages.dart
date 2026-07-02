@@ -357,7 +357,7 @@ class _MessagesState extends State<Messages> with TickerProviderStateMixin {
   //     }
   // }
 void _scrollToBottom() {
-    scrollController!.animateTo(scrollController!.position.maxScrollExtent, duration: Duration(milliseconds: 300), curve: Curves.easeOut);
+    scrollController!.animateTo(scrollController!.position.maxScrollExtent, duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
   }
 
   // detect scroll to end and load more items
@@ -540,7 +540,7 @@ void _scrollToBottom() {
                 SafeArea(
 
                 child: Container(
-                    padding: EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(16),
                     child:
                         Column(
 
@@ -566,7 +566,7 @@ void _scrollToBottom() {
                             (role.toLowerCase() == Constants.salesManager.toLowerCase() || role.toLowerCase() == Constants.salesExecutive.toLowerCase()) ?
                                   MaterialButton(
                                         padding: const EdgeInsets.fromLTRB(18.0, 12.0, 18.0, 12.0),
-                                        color: Color(0xFF008060),
+                                        color: const Color(0xFF008060),
                                         splashColor: Colors.black38,
                                         colorBrightness: Brightness.dark,
                                         elevation: 2,
@@ -578,7 +578,7 @@ void _scrollToBottom() {
                                         //   // onSubmit(context);
                                         // },
                                         onPressed: () => {
-                                            Navigator.push(context, MaterialPageRoute(builder: (context) => MessagingAdmin('All', 'All')))
+                                            Navigator.push(context, MaterialPageRoute(builder: (context) => const MessagingAdmin('All', 'All')))
                                           },
                                         child: Row(
                                           mainAxisAlignment: MainAxisAlignment.center,
@@ -618,10 +618,10 @@ void _scrollToBottom() {
                                                   ),alignment: Alignment.bottomCenter,
                                                   child:
                                                 Container(
-                                                      margin: EdgeInsets.fromLTRB(0,6,0,6),
-                                                      padding: EdgeInsets.fromLTRB(16,8,16,8),
+                                                      margin: const EdgeInsets.fromLTRB(0,6,0,6),
+                                                      padding: const EdgeInsets.fromLTRB(16,8,16,8),
                                                       decoration: BoxDecoration(
-                                                        color: Color(0xFFF9F9F9),
+                                                        color: const Color(0xFFF9F9F9),
                                                         borderRadius: const BorderRadius.all(Radius.circular(24)),
                                                         border: Border.all(
                                                                   color: Colors.black12, // Set the color of the border here
@@ -647,16 +647,16 @@ void _scrollToBottom() {
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Icon(PhosphorIconsRegular.chatsTeardrop, color: Color(0xFFAAAAAA), size: 32, ),
+                                    const Icon(PhosphorIconsRegular.chatsTeardrop, color: Color(0xFFAAAAAA), size: 32, ),
                                     sizedBox(8),
-                                    Text('No messages yet!'),
+                                    const Text('No messages yet!'),
                                   ],
                                 )
                               )
                             ),
                             
                             // loader while fetching data
-                            refreshCheckProgress? AppProgress(height: 30, width: 30,) : new SizedBox(height: 0,),
+                            refreshCheckProgress? const AppProgress(height: 30, width: 30,) : new SizedBox(height: 0,),
                             
                           // Container(
                           //     padding: EdgeInsets.all(8),
@@ -812,7 +812,7 @@ Widget NotificationsCard(int position){
         
         Container(
           padding: const EdgeInsets.all(6),
-          child:  Icon(PhosphorIconsRegular.caretRight, color: Colors.black87, size: 24,),
+          child:  const Icon(PhosphorIconsRegular.caretRight, color: Colors.black87, size: 24,),
         ),
       ],
     )

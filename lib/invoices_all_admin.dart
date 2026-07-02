@@ -12,7 +12,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart';
-import 'package:provider/provider.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:anjanitek/database_internal.dart';
 import 'package:anjanitek/modals/users.dart';
@@ -47,6 +47,7 @@ class _InvoicesAllAdminState extends State<InvoicesAllAdmin> with TickerProvider
   bool refreshCheckProgress = false;
   List<Invoices> invoicesList = [];
   ScrollController? scrollController;
+  bool isListView = false;
   
   int offset = 0;
   bool connectionStatus = true;
@@ -455,6 +456,7 @@ class _InvoicesAllAdminState extends State<InvoicesAllAdmin> with TickerProvider
                             // child: CardRound(Palette.lightBackground, Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: <Widget>[
+                                
                                 // sizedBox(24),
                                 // Row(
                                 //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -482,44 +484,159 @@ class _InvoicesAllAdminState extends State<InvoicesAllAdmin> with TickerProvider
                                 // ),
                                 AppHeader('Invoices', '', 1),
                                 // sizedBox(24),
-                                Container(
-                                  margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
-                                  child: Text('Invoices - ${invoicesList.length}', style: GoogleFonts.montserrat(textStyle: Theme.of(context).textTheme.headlineSmall, fontWeight: FontWeight.bold), ),
-                                ),
+                                // Container(
+                                //   margin: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                                //   child: Text('Invoices - ${invoicesList.length}', style: GoogleFonts.montserrat(textStyle: Theme.of(context).textTheme.headlineSmall, fontWeight: FontWeight.bold), ),
+                                // ),
                                 // sizedBox(8),
                                 Center(child: connectionStatus ? sizedBox(0) : Text('No network detected. Try again later!', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, color: Colors.red, fontWeight: FontWeight.bold)),),
-                                
-                                // sizedBox(8),
-                                //  MaterialButton(
-                                //     child: Text('Update profile'),
-                                //     padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
-                                //     color: Palette.blue,
-                                //     textColor: Palette.lightBackground,
-                                //     splashColor: Color(0xFF008060),
-                                //     // colorBrightness: Brightness.light,
-                                //     elevation: 0,
-                                //     highlightElevation: 2,
-                                //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-                                //     onPressed: () => updateInvoicesAllAdmin(context),
-                                //   ),
-                                
-
-
-                                
+                                Container(
+                                  margin: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                                  child: 
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                    Text('Invoices - ${invoicesList.length}', style: GoogleFonts.montserrat(textStyle: Theme.of(context).textTheme.headlineSmall, fontWeight: FontWeight.bold), ),
+                                    IconButton(
+                                      icon: Icon(isListView ? PhosphorIconsRegular.listBullets : PhosphorIconsRegular.cards),
+                                      onPressed: () {
+                                      // Toggle between list view and card view
+                                      setState(() {
+                                        isListView = !isListView;
+                                      });
+                                      },
+                                    ),
+                                    ],
+                                  ),
+                                ),
                               ],
                             
                             ),
 
                             sizedBox(8),
 
-                            invoicesList.isNotEmpty ?
+
+                            sizedBox(8),
+                            invoicesList.isNotEmpty?
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text('Total Pending:', textAlign: TextAlign.center, style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, color: Colors.black87, fontWeight: FontWeight.bold )),
+                                Text(' ₹ ${NumberFormat("#,##,##0.00", "en_IN").format(invoicesList.fold(0.0, (sum, invoice) => sum + (invoice.pending ?? 0.0)))}', 
+                                    textAlign: TextAlign.center, 
+                                    style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyMedium, color: Colors.black87, fontWeight: FontWeight.bold )),
+                              ],
+                            ) : sizedBox(0),
+                            sizedBox(8),
+
+                            invoicesList.isNotEmpty && !isListView ?
+                            Expanded(
+                              child: Container(
+                                        // margin: EdgeInsets.fromLTRB(8,8,8,8),
+                                        // padding: EdgeInsets.fromLTRB(16,16,16,8),
+                                        decoration: const BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.all(Radius.circular(24)),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.black12,
+                                              offset: Offset(0.0, 0.0),
+                                              blurRadius: 12.0,
+                                              spreadRadius: 0.3,
+                                            ),
+                                          ]
+                                        ),
+                            child: 
+                                 NotificationListener<ScrollNotification>(
+                              onNotification: (ScrollNotification scrollInfo) {
+                                if (scrollInfo.metrics.axis == Axis.vertical && scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent) {
+                                  
+                                  if(invoicesList.length-50 == offset){
+                                    offset = offset+50;
+                                    // show up the loader
+                                    startLoader();
+                                  }
+                                  else {
+                                    //print('do nothing');
+                                  }
+                                }
+                                return true;
+                              },
+
+                              
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.vertical,
+                                
+                              child:  SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                                child: 
+                                DataTable(
+                                  
+                                  headingRowHeight: 48.0, // Set the header row height to be thin
+                                  dividerThickness: 0.4, // Set the divider thickness to be very thin
+                                  columnSpacing: 16.0, // Set column spacing to be very less
+                                  columns: <DataColumn>[
+                                    DataColumn(label: Text('Invoice No', textAlign: TextAlign.center, style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, color: Colors.black87, fontWeight: FontWeight.bold ))),
+                                    DataColumn(label: Text('Invoiced Amount', textAlign: TextAlign.center, style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, color: Colors.black87, fontWeight: FontWeight.bold ))),
+                                    DataColumn(label: Text('Pending', textAlign: TextAlign.center, style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, color: Colors.black87, fontWeight: FontWeight.bold ))),
+                                    DataColumn(label: Text('Invoice Date', textAlign: TextAlign.center, style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, color: Colors.black87, fontWeight: FontWeight.bold ))),
+                                    // DataColumn(label: Text('Due Date', textAlign: TextAlign.center, style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, color: Colors.black87, fontWeight: FontWeight.bold ))),
+                                    DataColumn(label: Text('Status', textAlign: TextAlign.center, style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, color: Colors.black87, fontWeight: FontWeight.bold ))),
+                                    DataColumn(label: Text('Boxes', textAlign: TextAlign.center, style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, color: Colors.black87, fontWeight: FontWeight.bold ))),
+                                  ],
+                                  rows: invoicesList.map<DataRow>((bill) {
+                                    return DataRow(
+                                      cells: <DataCell>[
+                                        DataCell(
+                                        Row(
+                                          children: [
+                                            Text('${bill.invoiceNo}', textAlign: TextAlign.center, style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, color: Colors.black87, fontWeight: FontWeight.w500 )),
+                                            Container(
+                                            padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(4),
+                                              ),
+                                              child: Text('${bill.invoiceType}', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, fontWeight: FontWeight.bold, color: bill.invoiceType == 'ATL' ? const Color(0xFFFF5252) : const Color(0xFFC41306))),  
+                                            ),
+                                          ]
+                                        ),
+                                        ),
+                                        DataCell(Text('₹ ${NumberFormat("#,##,##0.00", "en_IN").format(bill.totalAmount!.toDouble())}', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, letterSpacing: 0.5, fontWeight: FontWeight.bold, color: Colors.black87))),
+                                        DataCell(Text('₹ ${NumberFormat("#,##,##0.00", "en_IN").format(bill.pending!.toDouble())}', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, letterSpacing: 0.5, fontWeight: FontWeight.bold, color: (bill.pending! > 0) ? const Color(0xFFC41306) : Colors.black54))),
+                                        DataCell(Text(DateFormat('d-MMM-y', 'en_US').format(getDate(bill.invoiceDate!)) , style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, color: Colors.black, fontWeight: FontWeight.w600), overflow: TextOverflow.ellipsis, maxLines: 2, softWrap: true, ),),
+                                        // DataCell(Text(DateFormat('d-MMM-y', 'en_US').format(getDate(bill.expiryDate!)) , style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, color: Colors.black, fontWeight: FontWeight.w600), overflow: TextOverflow.ellipsis, maxLines: 2, softWrap: true, ),),
+                                        (bill.status == Constants.Paid) ?
+                                        DataCell(Text(bill.status! , style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, color: Colors.green, fontWeight: FontWeight.bold ), overflow: TextOverflow.ellipsis, maxLines: 2, softWrap: true,  ))
+                                        :
+                                        DataCell(Text((bill.status == Constants.NotPaid) ? Constants.NotPaid : 'Partially Paid' , style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, color: Colors.red, fontWeight: FontWeight.bold ), overflow: TextOverflow.ellipsis, maxLines: 2, softWrap: true,  )),
+                                        // (bill.status == Constants.Paid) ?
+                                        // DataCell(Text(bill.status! , style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, color: Colors.green, fontWeight: FontWeight.bold ), overflow: TextOverflow.ellipsis, maxLines: 2, softWrap: true,  ))
+                                        // :
+                                        // DataCell(
+                                        // ((getDate(bill.expiryDate!).difference(DateTime.now()).inDays) >= 0) ?
+                                        // Text('${(getTimeDiff(getDate(bill.expiryDate!), DateTime.now()))} left' , style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, color: Colors.red, fontWeight: FontWeight.bold ), overflow: TextOverflow.ellipsis, maxLines: 2, softWrap: true,  )
+                                        // : Text('Expired ${(getDate(bill.expiryDate!).difference(DateTime.now()).inDays.abs())} day(s) ago' , style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, color: Colors.red, fontWeight: FontWeight.bold ), overflow: TextOverflow.ellipsis, maxLines: 2, softWrap: true, ),
+                                        // ),
+                                        DataCell(Text('${bill.sales}', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, letterSpacing: 0.5, fontWeight: FontWeight.bold, color: Colors.black87))),
+                                      ],
+                                    );
+                                  }).toList(),
+                                  ),
+                                  ),
+                                ),
+                            )
+                            )
+                            )
+                            : sizedBox(0),
+
+                            invoicesList.isNotEmpty && isListView ?
                             Expanded(
                               
                               child: RefreshIndicator(
-                            onRefresh: _refreshList,
-                            child: 
-                              ListView.builder(
-                                  physics: AlwaysScrollableScrollPhysics(),
+                              onRefresh: _refreshList,
+                              child: 
+                                ListView.builder(
+                                  physics: const AlwaysScrollableScrollPhysics(),
                                   controller: scrollController,
                                   scrollDirection: Axis.vertical,
                                   itemCount: invoicesList.length,
@@ -533,20 +650,20 @@ class _InvoicesAllAdminState extends State<InvoicesAllAdmin> with TickerProvider
                                                   ),alignment: Alignment.bottomCenter,
                                                   child:
                                                 Container(
-                                                      margin: EdgeInsets.fromLTRB(16,8,16,8),
-                                                      padding: EdgeInsets.fromLTRB(16,16,16,8),
-                                                      decoration: BoxDecoration(
+                                                      margin: const EdgeInsets.fromLTRB(8,8,8,8),
+                                                      padding: const EdgeInsets.fromLTRB(16,16,16,8),
+                                                      decoration: const BoxDecoration(
                                                         color: Colors.white,
-                                                        borderRadius: const BorderRadius.all(Radius.circular(24)),
+                                                        borderRadius: BorderRadius.all(Radius.circular(24)),
                                                         // border: Border.all(
                                                         //           color: Colors.black12, // Set the color of the border here
                                                         //           width: 1, // Set the width of the border here
                                                         //         ),
-                                                        boxShadow: const [
+                                                        boxShadow: [
                                                           BoxShadow(
                                                             color: Colors.black12,
                                                             offset: Offset(0.0, 0.0),
-                                                            blurRadius: 8.0,
+                                                            blurRadius: 12.0,
                                                             spreadRadius: 0.3,
                                                           ),
                                                         ]
@@ -557,10 +674,58 @@ class _InvoicesAllAdminState extends State<InvoicesAllAdmin> with TickerProvider
                                   }),
                               )
                             )
+                            
                             : sizedBox(0),
                             
                             // loader while fetching data
-                            refreshCheckProgress? AppProgress(height: 30, width: 30,) : new SizedBox(height: 0,),
+                            refreshCheckProgress? const AppProgress(height: 30, width: 30,) : new SizedBox(height: 0,),
+                            
+
+                            // invoicesList.isNotEmpty ?
+                            // Expanded(
+                              
+                            //   child: RefreshIndicator(
+                            // onRefresh: _refreshList,
+                            // child: 
+                            //   ListView.builder(
+                            //       physics: const AlwaysScrollableScrollPhysics(),
+                            //       controller: scrollController,
+                            //       scrollDirection: Axis.vertical,
+                            //       itemCount: invoicesList.length,
+                            //       itemBuilder: (context, index){
+                                    
+                            //         return  FadeTransition(opacity: _controller,
+                            //               child:
+                            //               ScaleTransition(scale: CurvedAnimation(
+                            //                         parent: _controllerCards,
+                            //                         curve: Curves.ease, // Use Curves.easeIn for ease-in animation
+                            //                       ),alignment: Alignment.bottomCenter,
+                            //                       child:
+                            //                     Container(
+                            //                           margin: const EdgeInsets.fromLTRB(16,8,16,8),
+                            //                           padding: const EdgeInsets.fromLTRB(16,16,16,8),
+                            //                           decoration: const BoxDecoration(
+                            //                             color: Colors.white,
+                            //                             borderRadius: BorderRadius.all(Radius.circular(24)),
+                            //                             boxShadow: [
+                            //                               BoxShadow(
+                            //                                 color: Colors.black12,
+                            //                                 offset: Offset(0.0, 0.0),
+                            //                                 blurRadius: 8.0,
+                            //                                 spreadRadius: 0.3,
+                            //                               ),
+                            //                             ]
+                            //                           ),
+                            //               child: invoiceCard(index),
+                            //             )
+                            //         ));
+                            //       }),
+                            //   )
+                            // )
+                            // : sizedBox(0),
+                            
+                            // // loader while fetching data
+                            // refreshCheckProgress? const AppProgress(height: 30, width: 30,) : new SizedBox(height: 0,),
                             
                           
                             
@@ -603,17 +768,17 @@ Widget invoiceCard(int position){
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text('${invoicesList[position].invoiceNo}', textAlign: TextAlign.center, style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyMedium, color: Colors.black87, fontWeight: FontWeight.w500 )),
-          SizedBox(width: 8,),
+          const SizedBox(width: 8,),
           // Text('${invoicesList[position].invoiceType}', textAlign: TextAlign.center, style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.titleMedium, fontSize: 12, fontWeight: FontWeight.bold, color: invoicesList[position].invoiceType == 'ATL' ? Colors.redAccent : Color(0xFFC41306), )),
           Container(
               padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
               decoration: BoxDecoration(
-                      color: invoicesList[position].invoiceType == 'ATL' ? Color(0x22FF5252) : Color(0x22C41306),
+                      color: invoicesList[position].invoiceType == 'ATL' ? const Color(0x22FF5252) : const Color(0x22C41306),
                       borderRadius: BorderRadius.circular(4),
                     ),
-                  child: Text('${invoicesList[position].invoiceType}', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, fontWeight: FontWeight.bold, color: invoicesList[position].invoiceType == 'ATL' ? Color(0xFFFF5252) : Color(0xFFC41306))),  
+                  child: Text('${invoicesList[position].invoiceType}', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, fontWeight: FontWeight.bold, color: invoicesList[position].invoiceType == 'ATL' ? const Color(0xFFFF5252) : const Color(0xFFC41306))),  
               ),
-          SizedBox(width: 8,),
+          const SizedBox(width: 8,),
         ]
       ),
       sizedBox(8),
@@ -663,15 +828,15 @@ Widget invoiceCard(int position){
             ],
           ),
           ),
-          Expanded(child: 
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(DateFormat('d-MMM-y', 'en_US').format(getDate(invoicesList[position].expiryDate!)) , style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyLarge, color: Colors.black, fontWeight: FontWeight.w600, fontSize: 14), overflow: TextOverflow.ellipsis, maxLines: 2, softWrap: true, ),
-              Text('Due date' , style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, height: 1.5), overflow: TextOverflow.ellipsis, maxLines: 2, softWrap: true, ),
-            ],
-          ),
-          ),
+          // Expanded(child: 
+          // Column(
+          //   crossAxisAlignment: CrossAxisAlignment.end,
+          //   children: [
+          //     Text(DateFormat('d-MMM-y', 'en_US').format(getDate(invoicesList[position].expiryDate!)) , style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyLarge, color: Colors.black, fontWeight: FontWeight.w600, fontSize: 14), overflow: TextOverflow.ellipsis, maxLines: 2, softWrap: true, ),
+          //     Text('Due date' , style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, height: 1.5), overflow: TextOverflow.ellipsis, maxLines: 2, softWrap: true, ),
+          //   ],
+          // ),
+          // ),
           // sizedBox(8),
           // IconButton(onPressed: ()=>{}, 
           //   style:  ButtonStyle(backgroundColor: MaterialStateColor.resolveWith((states) => Color(0x33008060))),
@@ -697,50 +862,51 @@ Widget invoiceCard(int position){
               Container(
                 padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
                 decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 1, 177, 28),
+                        color: const Color.fromARGB(255, 1, 177, 28),
                         borderRadius: BorderRadius.circular(16),
                       ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(PhosphorIconsRegular.check, size: 16, color: Colors.white),
-                    SizedBox(width: 4,),
+                    const Icon(PhosphorIconsRegular.check, size: 16, color: Colors.white),
+                    const SizedBox(width: 4,),
                     Text('Paid' , style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, height: 1.5, color: Colors.white, fontWeight: FontWeight.bold ), overflow: TextOverflow.ellipsis, maxLines: 2, softWrap: true,  )
                   ]
                 )
               )
-              : Container(
-                padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
-                decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(PhosphorIconsRegular.warning, size: 16, color: Colors.white),
-                    SizedBox(width: 4,),
-                    ((getDate(invoicesList[position].expiryDate!).difference(DateTime.now()).inDays) >= 0) ?
-                      Text('${(getTimeDiff(getDate(invoicesList[position].expiryDate!), DateTime.now()))} left' , style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, height: 1.5, color: Colors.white, fontWeight: FontWeight.bold ), overflow: TextOverflow.ellipsis, maxLines: 2, softWrap: true,  )
-                      : Text('Expired ${(getDate(invoicesList[position].expiryDate!).difference(DateTime.now()).inDays.abs())} day(s) ago' , style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, height: 1.5, color: Colors.white, fontWeight: FontWeight.bold ), overflow: TextOverflow.ellipsis, maxLines: 2, softWrap: true, ),
+              : 
+            //   Container(
+            //     padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+            //     decoration: BoxDecoration(
+            //             color: Colors.red,
+            //             borderRadius: BorderRadius.circular(16),
+            //           ),
+            //     child: Row(
+            //       mainAxisAlignment: MainAxisAlignment.center,
+            //       mainAxisSize: MainAxisSize.min,
+            //       children: [
+            //         const Icon(PhosphorIconsRegular.warning, size: 16, color: Colors.white),
+            //         const SizedBox(width: 4,),
+            //         ((getDate(invoicesList[position].expiryDate!).difference(DateTime.now()).inDays) >= 0) ?
+            //           Text('${(getTimeDiff(getDate(invoicesList[position].expiryDate!), DateTime.now()))} left' , style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, height: 1.5, color: Colors.white, fontWeight: FontWeight.bold ), overflow: TextOverflow.ellipsis, maxLines: 2, softWrap: true,  )
+            //           : Text('Expired ${(getDate(invoicesList[position].expiryDate!).difference(DateTime.now()).inDays.abs())} day(s) ago' , style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, height: 1.5, color: Colors.white, fontWeight: FontWeight.bold ), overflow: TextOverflow.ellipsis, maxLines: 2, softWrap: true, ),
               
-                  ]
-                )
-              ),
+            //       ]
+            //     )
+            //   ),
               
-            SizedBox(width: 8,),
-            (invoicesList[position].status != Constants.Paid) ?
+            // const SizedBox(width: 8,),
+            // (invoicesList[position].status != Constants.Paid) ?
               Container(
                 padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
                 decoration: BoxDecoration(
-                        color: Color(0x99FFCDD2),
+                        color: const Color(0x99FFCDD2),
                         borderRadius: BorderRadius.circular(16),
                       ),
-                    child: Text((invoicesList[position].status == Constants.PartialPaid) ? 'Partially Paid' : 'Not Paid', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, fontWeight: FontWeight.w600, color: Color(0xFFF91616))),  
+                    child: Text((invoicesList[position].status == Constants.PartialPaid) ? 'Partially Paid' : 'Not Paid', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, fontWeight: FontWeight.w600, color: const Color(0xFFF91616))),  
                 )
-                : sizedBox(0),
+                // : sizedBox(0),
 
               
         ]

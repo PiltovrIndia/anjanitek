@@ -1,7 +1,14 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:anjanitek/modals/dealers.dart';
+import 'package:anjanitek/modals/product_cart.dart';
+import 'package:anjanitek/modals/product_tag.dart';
+import 'package:anjanitek/modals/reservation.dart';
+import 'package:anjanitek/modals/reservation_product.dart';
+import 'package:anjanitek/modals/ordered_item.dart';
 import 'package:anjanitek/modals/users.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:math';
@@ -34,6 +41,7 @@ Future<bool> saveData(Users user) async {
     await prefs.setInt(Constants.isActive, user.isActive!);
     await prefs.setString(Constants.mapName, user.mapName?? '');
     await prefs.setString(Constants.mapMobile, user.mapMobile?? '');
+    await prefs.setString(Constants.appVersionFromAPI, user.appVersion?? '');
     
     return true;
     
@@ -508,3 +516,198 @@ Future<String> getPhoneNumber() async {
 
 
 
+
+
+// Function to differentiate and decode
+  String decodeServerText(String text) {
+    try {
+      // Check if the string is URL-encoded by comparing with decoded
+      String decoded = Uri.encodeComponent(text);
+      if (decoded != text) {
+        return utf8.decode(text.codeUnits);
+        // return decoded;
+      } else {
+        // If not URL-encoded, try to decode using UTF-8
+        return decoded;
+        // return utf8.decode(text.codeUnits);
+      }
+    } catch (e) {
+      // If decoding fails, return the original text
+      return text;
+    }
+  }
+
+  // Regular expression to find URLs
+  final RegExp urlRegExp = RegExp(
+    r'(http|https):\/\/([\w\-]+\.)+[\w\-]+(\/[\w\-\.\/?%&=]*)?',
+    caseSensitive: false,
+  );
+
+  // Function to extract URLs and separate them from the text
+  String extractUrls(String text) {
+    // Find all URLs in the input text
+    Iterable<RegExpMatch> matches = urlRegExp.allMatches(text);
+
+    // Extract URLs and remove them from the text
+    StringBuffer urlsBuffer = StringBuffer();
+    String modifiedText = text;
+
+    for (var match in matches) {
+      urlsBuffer.write(match.group(0)! + '\n'); // Add URLs to the buffer
+      modifiedText = modifiedText.replaceAll(match.group(0)!, ''); // Remove URLs from text
+    }
+
+    // setState(() {
+    //   extractedUrls = urlsBuffer.toString().trim(); // Store the extracted URLs
+    //   remainingText = modifiedText.trim(); // Store the remaining text
+    // });
+
+    return urlsBuffer.toString().trim(); // Store the extracted URLs
+  }
+
+getUnitofCategory(String category){
+  switch (category) {
+    case 'VCL':
+      return 'boxes';
+    case 'ATL':
+      return 'boxes';
+    case 'Collections':
+      return '₹';
+    default:
+      return '';
+  }
+}
+
+Widget buildTargetItem(BuildContext context, String title, double achieved, dynamic target, Color color) {
+  // if(target is String && target.toLowerCase() == 'to be decided') {
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       Text(title, style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyMedium, fontWeight: FontWeight.w500, color: Colors.black87)),
+  //       sizedBox(4),
+  //       Text('To be decided', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, color: Colors.black)),
+  //     ],
+  //   );
+  // }
+  
+  // check if target is string value or double value
+  double progress = 0;
+  if (target is String && target.toLowerCase() == 'to be decided') {
+    progress = 0;
+  } else if (target is double) {
+    if(target > 0) {
+      progress = achieved / target;
+    }
+    else {
+      progress = 0;
+    }
+  }
+
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: 4,
+            children: [
+              Text(title, style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyMedium, fontWeight: FontWeight.w600, letterSpacing: 1.5, color: Colors.black54)),
+              title == 'Collections' ?
+              Text('₹ ${NumberFormat("#,##,##0", "en_IN").format(achieved)} / ${(target is String && target.toLowerCase() == 'to be decided') ? 'To be decided' : '₹ ${NumberFormat("#,##,##0", "en_IN").format(target)}'}', style: GoogleFonts.montserrat(textStyle: Theme.of(context).textTheme.bodyMedium, fontSize: 16, letterSpacing: 0.5, fontWeight: FontWeight.w600, color: Colors.black87))
+              :
+              Text('${NumberFormat("#,##,##0", "en_IN").format(achieved)} / ${(target is String && target.toLowerCase() == 'to be decided') ? 'To be decided' : '${NumberFormat("#,##,##0", "en_IN").format(target)} ${getUnitofCategory(title)}'}', style: GoogleFonts.montserrat(textStyle: Theme.of(context).textTheme.bodyMedium, fontSize: 16, letterSpacing: 0.5, fontWeight: FontWeight.w600, color: Colors.black87)),
+            ],
+          ),
+          // Text(title + ' ${NumberFormat("#,##,##0", "en_IN").format(achieved)} (${(progress * 100).toStringAsFixed(1)}%)', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyMedium, fontWeight: FontWeight.w500)),
+          // progress > 100 ?
+          // Text('(100%)', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, color: Colors.black, fontWeight: FontWeight.w600))
+          // :
+          Text('(${(progress * 100).toStringAsFixed(1)}%)', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, color: Colors.black54)),
+          // Text('${NumberFormat("#,##,##0", "en_IN").format(achieved)} (${(progress * 100).toStringAsFixed(1)}%)', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, color: color, fontWeight: FontWeight.w600)),
+        ],
+      ),
+      sizedBox(4),
+      LinearProgressIndicator(
+        value: progress > 1 ? 1 : progress,
+        color: color,
+        backgroundColor: color.withOpacity(0.2),
+        minHeight: 8,
+        borderRadius: BorderRadius.circular(4),
+      ),
+    ],
+  );
+}
+
+formatTotalWeightForDesignType(List<OrderedItem> items, List<ProductTag> productTags) {
+    
+    // get the tags specific to BoxWeight
+    List<ProductTag> boxWeightTagsById = productTags.where((tag) => tag.type == 'BoxWeight' && tag.tagId != null).toList();
+    double weightInKg = 0;
+
+    // parse through each item's tags and check which box weight tag it has and calculate the weight accordingly
+    // BTW, tags value for each item is a comma separated string of tagIds, so we need to split it and check for each tagId
+    for (var item in items) {
+
+        item.tags?.split(',').forEach((tagId) {
+          var tag = boxWeightTagsById.firstWhere((tag) => tag.tagId.toString() == tagId, orElse: () => ProductTag(tagId: null, name: '0', type: '', description: '0'));
+          weightInKg += (double.tryParse(tag.name!) ?? 0) * ((item.status.toLowerCase() == 'submitted') ? item.requestedQty : (item.status.toLowerCase() == 'approved' || item.status.toLowerCase() == 'modified') ? (item.approvedQty + item.productionQty) : 0);
+        });
+        
+    }
+
+    
+
+
+    // final weightInKg = items.fold( 0, (total, item) => total + (item.weight * item.quantity), );
+
+    if (weightInKg >= 1000) {
+      final weightInTons = weightInKg / 1000;
+      return '${weightInTons.toStringAsFixed(weightInTons % 1 == 0 ? 0 : 2)} ton';
+    }
+
+    if (weightInKg >= 1) {
+      return '${weightInKg.toStringAsFixed(weightInKg % 1 == 0 ? 0 : 2)} kg';
+    }
+
+    final weightInGrams = weightInKg * 1000;
+    return '${weightInGrams.toStringAsFixed(weightInGrams % 1 == 0 ? 0 : 2)} g';
+  }
+
+formatTotalWeightForDesignType_Old(List<ReservationProduct> items, List<ProductTag> productTags) {
+    
+    // get the tags specific to BoxWeight
+    List<ProductTag> boxWeightTagsById = productTags.where((tag) => tag.type == 'BoxWeight' && tag.tagId != null).toList();
+    double weightInKg = 0;
+
+    // parse through each item's tags and check which box weight tag it has and calculate the weight accordingly
+    // BTW, tags value for each item is a comma separated string of tagIds, so we need to split it and check for each tagId
+    for (var item in items) {
+
+        item.tags?.split(',').forEach((tagId) {
+          var tag = boxWeightTagsById.firstWhere((tag) => tag.tagId.toString() == tagId, orElse: () => ProductTag(tagId: null, name: '0', type: '', description: '0'));
+          weightInKg += (double.tryParse(tag.name!) ?? 0) * ((item.status.toLowerCase() == 'approved' || item.status.toLowerCase() == 'modified') ? item.approvedQty : item.requestedQty);
+        });
+        
+    }
+
+    
+
+
+    // final weightInKg = items.fold( 0, (total, item) => total + (item.weight * item.quantity), );
+
+    if (weightInKg >= 1000) {
+      final weightInTons = weightInKg / 1000;
+      return '${weightInTons.toStringAsFixed(weightInTons % 1 == 0 ? 0 : 2)} ton';
+    }
+
+    if (weightInKg >= 1) {
+      return '${weightInKg.toStringAsFixed(weightInKg % 1 == 0 ? 0 : 2)} kg';
+    }
+
+    final weightInGrams = weightInKg * 1000;
+    return '${weightInGrams.toStringAsFixed(weightInGrams % 1 == 0 ? 0 : 2)} g';
+  }

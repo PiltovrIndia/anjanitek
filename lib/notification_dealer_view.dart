@@ -403,7 +403,7 @@ class _NotificationsDealerViewState extends State<NotificationsDealerView> with 
                 SafeArea(
 
                 child: Container(
-                    margin: EdgeInsets.all(16),
+                    margin: const EdgeInsets.all(16),
                     child:
                         Column(
 
@@ -503,7 +503,7 @@ class _NotificationsDealerViewState extends State<NotificationsDealerView> with 
                             // : Text('0 Notifications'),
                             
                             // loader while fetching data
-                            refreshCheckProgress? AppProgress(height: 30, width: 30,) : new SizedBox(height: 0,),
+                            refreshCheckProgress? const AppProgress(height: 30, width: 30,) : new SizedBox(height: 0,),
                             
                           // Container(
                           //     padding: EdgeInsets.all(8),

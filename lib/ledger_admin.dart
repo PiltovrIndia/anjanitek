@@ -10,7 +10,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart';
-import 'package:provider/provider.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:anjanitek/database_internal.dart';
 import 'package:anjanitek/modals/users.dart';
@@ -438,7 +438,7 @@ class _LedgerAdminState extends State<LedgerAdmin> with TickerProviderStateMixin
                 SafeArea(
 
                 child: Container(
-                    margin: EdgeInsets.all(16),
+                    margin: const EdgeInsets.all(16),
                     child:
                         Column(
 
@@ -462,10 +462,10 @@ class _LedgerAdminState extends State<LedgerAdmin> with TickerProviderStateMixin
                                 
                                 sizedBox(8),
                                 Container( 
-                                    decoration: BoxDecoration(
+                                    decoration: const BoxDecoration(
                                       // color: Theme.of(context).shadowColor,
                                       color: Colors.white,
-                                      borderRadius: const BorderRadius.all(Radius.circular(16)),
+                                      borderRadius: BorderRadius.all(Radius.circular(16)),
                                       // border: Border.all(
                                       //           color: Colors.black12, // Set the color of the border here
                                       //           width: 1, // Set the width of the border here
@@ -496,7 +496,7 @@ class _LedgerAdminState extends State<LedgerAdmin> with TickerProviderStateMixin
                                                     //   ],
                                                     // ),
                                                     Text('Opening balance:' , style: GoogleFonts.montserrat(textStyle: Theme.of(context).textTheme.bodyMedium)),
-                                                    SizedBox(width:4),
+                                                    const SizedBox(width:4),
                                                     Text('₹ ${NumberFormat("#,##,##0.00", "en_IN").format(totalOutstanding)} Dr', style: GoogleFonts.montserrat(textStyle: Theme.of(context).textTheme.bodyLarge, fontSize: 16, letterSpacing: 1.5, fontWeight: FontWeight.bold)),
                                                     
                                           // InkWell(
@@ -523,12 +523,12 @@ class _LedgerAdminState extends State<LedgerAdmin> with TickerProviderStateMixin
                                     child: 
                                       Container(
                                         // margin: EdgeInsets.all(8),
-                                        padding: EdgeInsets.all(16),
+                                        padding: const EdgeInsets.all(16),
                                         decoration: BoxDecoration(
                                                       color: Colors.white,
                                                       borderRadius: const BorderRadius.all(Radius.circular(16)),
                                                       border: Border.all(
-                                                                color: Color(0xFF93C6B9), // Set the color of the border here
+                                                                color: const Color(0xFF93C6B9), // Set the color of the border here
                                                                 width: 1, // Set the width of the border here
                                                               ),
                                                       boxShadow: const [
@@ -545,9 +545,9 @@ class _LedgerAdminState extends State<LedgerAdmin> with TickerProviderStateMixin
                                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                               mainAxisSize: MainAxisSize.max,
                                               children: [
-                                                Icon(PhosphorIconsRegular.calendarBlank, size: 24, color: Color(0xFF01B11C),),
+                                                const Icon(PhosphorIconsRegular.calendarBlank, size: 24, color: Color(0xFF01B11C),),
                                                 Text(DateFormat('d-MMM-y', 'en_US').format(fromDate), style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyMedium, fontWeight: FontWeight.bold, color: Colors.black54, )),
-                                                Icon(PhosphorIconsRegular.arrowRight, size: 16, color: Color(0xFF999999),),
+                                                const Icon(PhosphorIconsRegular.arrowRight, size: 16, color: Color(0xFF999999),),
                                                 Text(DateFormat('d-MMM-y', 'en_US').format(toDate), style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyMedium, fontWeight: FontWeight.bold, color: Colors.black54, )),
                                               ],
                                             ),
@@ -590,7 +590,7 @@ class _LedgerAdminState extends State<LedgerAdmin> with TickerProviderStateMixin
                             onRefresh: _refreshList,
                             child: 
                               ListView.builder(
-                                  physics: AlwaysScrollableScrollPhysics(),
+                                  physics: const AlwaysScrollableScrollPhysics(),
                                   controller: scrollController,
                                   scrollDirection: Axis.vertical,
                                   itemCount: paymentsList.length,
@@ -605,11 +605,11 @@ class _LedgerAdminState extends State<LedgerAdmin> with TickerProviderStateMixin
                                                   child:
                                                 Container(
                                                       // margin: EdgeInsets.fromLTRB(0,8,0,8),
-                                                      padding: EdgeInsets.fromLTRB(0,8,0,0),
+                                                      padding: const EdgeInsets.fromLTRB(0,8,0,0),
                                                       // padding: EdgeInsets.fromLTRB(16,16,16,8),
-                                                      decoration: BoxDecoration(
+                                                      decoration: const BoxDecoration(
                                                         color: Colors.white,
-                                                        borderRadius: const BorderRadius.all(Radius.circular(24)),
+                                                        borderRadius: BorderRadius.all(Radius.circular(24)),
                                                         // border: Border.all(
                                                         //           color: Colors.black12, // Set the color of the border here
                                                         //           width: 1, // Set the width of the border here
@@ -632,7 +632,7 @@ class _LedgerAdminState extends State<LedgerAdmin> with TickerProviderStateMixin
                             : sizedBox(0),
                             
                             // loader while fetching data
-                            refreshCheckProgress? AppProgress(height: 30, width: 30,) : new SizedBox(height: 0,),
+                            refreshCheckProgress? const AppProgress(height: 30, width: 30,) : new SizedBox(height: 0,),
                             
                           
                             
@@ -695,26 +695,26 @@ Widget invoiceCard(int position){
       Row(
         children: [
           Text('₹ ${NumberFormat("#,##,##0.00", "en_IN").format(paymentsList[position].amount!)}', style: GoogleFonts.montserrat(textStyle: Theme.of(context).textTheme.bodyLarge, fontSize: 18, letterSpacing: 1.5, fontWeight: FontWeight.bold)),
-          SizedBox(width: 8,),
+          const SizedBox(width: 8,),
           (paymentsList[position].type == Constants.debit) ?
           Container(
             
             padding: const EdgeInsets.all(4),
             decoration: BoxDecoration(
-                    color: Color(0xFFFFE1E4),
+                    color: const Color(0xFFFFE1E4),
                     borderRadius: BorderRadius.circular(4),
                   ),
-                child: Text('DEBIT', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, fontWeight: FontWeight.w600, color: Color(0xFFF91616))),  
+                child: Text('DEBIT', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, fontWeight: FontWeight.w600, color: const Color(0xFFF91616))),  
             )
             :
           Container(
             
             padding: const EdgeInsets.all(4),
             decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 213, 245, 214),
+                    color: const Color.fromARGB(255, 213, 245, 214),
                     borderRadius: BorderRadius.circular(4),
                   ),
-                child: Text('CREDIT', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, fontWeight: FontWeight.w600, color: Color(0xFF008060))),  
+                child: Text('CREDIT', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, fontWeight: FontWeight.w600, color: const Color(0xFF008060))),  
             ),
           // Icon(PhosphorIconsFill.checkCircle, size: 24, color: Color.fromARGB(255, 1, 177, 28),),
         ],

@@ -1,0 +1,2 @@
+/Users/pavankusuma/Documents/Projects_Active/anjanitek/android/app/.cxx/Debug/3e4i2e5c/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Users/pavankusuma/Documents/Projects_Active/anjanitek/android/app/.cxx/Debug/3e4i2e5c/armeabi-v7a/CMakeFiles/rebuild_cache.dir

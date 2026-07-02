@@ -9,7 +9,7 @@ class APIUrls {
     // static String authority = 'smartcampusweb.vercel.app'; // production
     // static String authority = '52.66.55.19'; // pre production
     // static String authority = 'localhost:3000'; // pre production
-    static String authority = 'anjanitek.com'; // pre production
+    static String authority = 'www.anjanitek.com';
     static String pass = 'KfUwvS0oE6zV9jyHqXxL2Pi4D1mG8aRtNcZn7Ml3bArpT5gJQsCWeYBf';
 
 
@@ -21,11 +21,17 @@ class APIUrls {
     static String stats = 'api/v2/dealerstats/';
     static String ledger = 'api/v2/ledger/';
     static String payments = 'api/v2/payments/';
+    static String confirmations = 'api/v2/confirmations/';
+    static String offers = 'api/v2/offers/';
+    static String targets = 'api/v2/targets/';
+    static String feed = 'api/v2/feed/';
     // messaging
     static String messaging = 'api/v2/messaging/';
     static String showrooms = 'api/v2/showrooms/';
     static String catalogues = 'api/v2/catalogues/';
     static String products = 'api/v2/products/';
+    static String reservations = 'api/v2/reservations/';
+    static String orders = 'api/v2/orders/';
 
     
     
@@ -116,7 +122,7 @@ class APIUrls {
     static String getUrl(String url, Map<String, String> queryParams){
 
       // for the url
-      Uri uri = Uri.http(
+      Uri uri = Uri.https(
         authority,
         url, 
         queryParams

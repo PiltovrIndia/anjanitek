@@ -1,0 +1,2 @@
+/Users/pavankusuma/Documents/Projects_Active/anjanitek/android/app/.cxx/RelWithDebInfo/4n2l1k1c/x86_64/CMakeFiles/edit_cache.dir
+/Users/pavankusuma/Documents/Projects_Active/anjanitek/android/app/.cxx/RelWithDebInfo/4n2l1k1c/x86_64/CMakeFiles/rebuild_cache.dir

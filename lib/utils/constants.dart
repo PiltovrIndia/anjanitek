@@ -1,7 +1,10 @@
 library constants;
 
-const String sc_app_version = '1.0.11';
-const String sc_app_version_ios = '1.0.5';
+const String appVersionFromAPI = 'appVersion';
+const String sc_app_version = '6';
+const String sc_app_version_ios = '6';
+// const String sc_app_version = '1.0.11';
+// const String sc_app_version_ios = '1.0.5';
 const String app_name = "AnjaniTek";
 const String header1 = "Header1";
 const String header2 = "Header2";
@@ -51,6 +54,10 @@ const String salesManager = "SalesManager"; // Reports to StateHead
 const String salesExecutive = "SalesExecutive"; // Reports to Sales Manager
 const String dealer = "dealer"; // Reports to Sales Executive
 const String sales = "sales";
+const String guest = "Guest";
+const String staff = "Staff";
+const String staffAdmin = "StaffAdmin";
+const String factory = "Factory";
 
 // requests and statuses
 const String profile = "Profile";
@@ -76,6 +83,12 @@ const String allow = "Allow";
 const String error = 'error';
 const String success = 'success';
 const String warning = 'warning';
+
+// Response
+const String yes = 'Yes';
+const String no = 'No';
+const String pending = 'Pending';
+const String checking = 'Checking';
 
 // days
 const String monday = "Monday";

@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:anjanitek/dealer_details.dart';
 import 'package:anjanitek/dealerdetails_admin.dart';
+import 'package:anjanitek/home_dealer.dart';
 import 'package:anjanitek/message_detail.dart';
+import 'package:anjanitek/modals/target.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -22,8 +24,8 @@ import 'package:anjanitek/utils/show_toast.dart';
 import 'package:anjanitek/utils/utils.dart';
 
 class SalesDealers2 extends StatefulWidget {
-  const SalesDealers2(this.selectedSalesPerson, this.selectedSalesPersonName );
-  final String selectedSalesPerson, selectedSalesPersonName;
+  const SalesDealers2(this.selectedSalesPerson, this.selectedSalesPersonName, this.selectedSalesPersonRole );
+  final String selectedSalesPerson, selectedSalesPersonName, selectedSalesPersonRole;
   
   @override
   _SalesDealers2State createState() => _SalesDealers2State();
@@ -34,15 +36,20 @@ class _SalesDealers2State extends State<SalesDealers2> {
   
   ScrollController? scrollController;
   DateTime today = DateTime.now();
-  bool isLoading = false;
+  bool isLoading = true;
   bool isDataAvailable = false;
+  bool outstandingLoading = false;
+  bool targetsLoading = false;
   bool endOfData = true;
   int offset = 0;
   int globalCount = 0;
   String? universityId, name, adminId, role, branch, id;
   String emptyStateMsg = '';
+  List<OutstandingByUser> outstandingsList = [];
   List<Users> dealersList = [];
   List<Users> _filteredUsers = [];
+  List<Target> targetsDataList = [];
+  String? currentMonthTargetDate;
   DateTime now = new DateTime.now();
   TextEditingController _textFieldController = TextEditingController();
   TextEditingController searchTextController = TextEditingController();
@@ -95,6 +102,7 @@ class _SalesDealers2State extends State<SalesDealers2> {
     }
 
     getStudents();
+    getSalePersonOutstanding();
   }
 
   // initiate the search
@@ -132,6 +140,7 @@ class _SalesDealers2State extends State<SalesDealers2> {
       // API call
       // key, type, id, playerId
       // print("${APIUrls.user}${APIUrls.pass}/$searchBy/$role/$adminId");
+      // print("${APIUrls.user}${APIUrls.pass}/$searchBy/$role/${widget.selectedSalesPerson }");
       var result = await get(Uri.parse(APIUrls.getUrl("${APIUrls.user}${APIUrls.pass}/$searchBy/$role/${widget.selectedSalesPerson }", queryParams)), headers: {"Accept": "application/json"});
       // var result = await get(Uri.parse(APIUrls.getUrl("${APIUrls.user}${APIUrls.pass}/$searchBy/$searchedText/$offset/$campus", queryParams)), headers: {"Accept": "application/json"});
 // print(result.body);
@@ -157,6 +166,11 @@ class _SalesDealers2State extends State<SalesDealers2> {
               _filteredUsers.clear();
               dealersList.addAll(list1);
               _filteredUsers.addAll(list1);
+
+              // get all the ids of users as comma separated string
+              String ids = list1.map((user) => user.id).join(',');
+
+              getSalePersonTargets(ids);
 
             //   // check if there are any official requests
             // // if so, lets get them all into a separate list for bulk operations
@@ -210,6 +224,115 @@ class _SalesDealers2State extends State<SalesDealers2> {
               endOfData = false;
             });
             // showToast(context, emptyStateMsg,Constants.warning);
+          }
+  }
+
+
+    // this will get every sale person outstanding.
+  void getSalePersonOutstanding() async {
+
+    setState(() {
+      outstandingLoading = true;
+    });
+      
+      // API call
+      // key, type, id, playerId
+      var api = '';
+      if(widget.selectedSalesPersonRole == Constants.salesExecutive) {
+        api = "${APIUrls.stats}${APIUrls.pass}/2/${widget.selectedSalesPerson}";
+      }
+      else {
+        api = "${APIUrls.stats}${APIUrls.pass}/1";
+      }
+      // print(api);
+       var result = await get(Uri.parse(APIUrls.getUrl(api, {})), headers: {"Accept": "application/json"});
+      
+      // get the result body which is JSON
+      var jsonString = jsonDecode(result.body); 
+      // convert jsonString to Map
+      var jsonObject = jsonString as Map; 
+
+      List<OutstandingByUser> list1;
+      // check if the api returned success
+      if(jsonObject['status'] == 200){
+        // get the list data from jsonObject
+        var requests = jsonObject['data'] as List;
+
+        if(requests.isNotEmpty) {
+          // convert to list
+          list1 = requests.map<OutstandingByUser>((json) => OutstandingByUser.fromJson(json)).toList();
+          
+          // check if there are any requests for approval
+          
+            setState(() {
+              outstandingsList.clear();
+              outstandingsList.addAll(list1);
+              outstandingLoading = false;
+
+            });
+
+        }
+        else {
+          // no requests pending for approval
+          setState(() {
+            outstandingLoading = false;
+          });
+        }
+
+        
+      } else {
+            // no requests pending for approval
+            setState(() {
+              outstandingLoading = false;
+            });
+            showToast(context, emptyStateMsg,Constants.warning);
+          }
+  }
+  
+  void getSalePersonTargets(String ids) async {
+
+    setState(() {
+      targetsLoading = true;
+    });
+      
+      // print("${APIUrls.targets}${APIUrls.pass}/T1/${DateTime.now().year}-${DateTime.now().month}-01/$ids");
+      var result = await get(Uri.parse(APIUrls.getUrl("${APIUrls.targets}${APIUrls.pass}/T1/${DateTime.now().year}-${DateTime.now().month}-01/$ids", {})), headers: {"Accept": "application/json"});
+       
+      // get the result body which is JSON
+      var jsonString = jsonDecode(result.body); 
+        
+        // convert jsonString to Map
+        var jsonObject = jsonString as Map; 
+        
+        // check if the api returned success
+        if(jsonObject['success']){
+        
+        // get the user data from jsonObject
+            var targetsData = jsonObject['data'] as List;
+            
+            // get the list of Target objects for each user from targetsData into a list
+            List<Target> allTargets = [];
+            for (var userEntry in targetsData) {
+              if (userEntry['targets'] != null) {
+                var targets = userEntry['targets'] as List;
+                allTargets.addAll(targets.map<Target>((json) => Target.fromJson(json)).toList());
+              }
+            }
+
+            setState(() {
+              currentMonthTargetDate = targetsData[0]['monthDate'];
+              targetsDataList = allTargets;
+              targetsLoading = false;
+              connectionStatus = true;
+            });
+
+        
+      } else {
+            // no requests pending for approval
+            setState(() {
+              targetsLoading = false;
+            });
+            showToast(context, emptyStateMsg,Constants.warning);
           }
   }
 
@@ -433,7 +556,7 @@ Widget userItemCard(int position, BuildContext context1){
     onTap: () => 
         // pass user details
         (_filteredUsers[position].role! == 'SalesExecutive' || _filteredUsers[position].role! == 'SalesManager') ?
-        Navigator.push(context, MaterialPageRoute(builder: (context) => SalesDealers2(_filteredUsers[position].id!, _filteredUsers[position].name!)))
+        Navigator.push(context, MaterialPageRoute(builder: (context) => SalesDealers2(_filteredUsers[position].id!, _filteredUsers[position].name!, _filteredUsers[position].role!)))
         : Navigator.push(context, MaterialPageRoute(builder: (context) => DealerDetails(widget.selectedSalesPerson, widget.selectedSalesPersonName, _filteredUsers[position].id!, _filteredUsers[position].name!))
         // : Navigator.push(context, MaterialPageRoute(builder: (context) => DealerDetails(dealersList[position].id!, dealersList[position].name!))
         // Navigator.push(context, MaterialPageRoute(builder: (context) => MessageDetail(adminId!, dealersList[position].id!, name!, dealersList[position].name!))
@@ -447,30 +570,25 @@ Widget userItemCard(int position, BuildContext context1){
       borderRadius: BorderRadius.circular(12),
       boxShadow: [
         BoxShadow(
-          color: Colors.black12,
-          offset: const Offset(0.0, 0.0),
-          blurRadius: 8.0,
-          spreadRadius: 0.3,
-        ),
+                          color: Colors.black12,
+                          offset: Offset(0.0, 0.0),
+                          blurRadius: 24.0,
+                          spreadRadius: 0.3,
+                        ),
       ]
     ),
       padding: const EdgeInsets.all(4),
-      margin: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+      margin: const EdgeInsets.fromLTRB(16, 8, 16, 4),
       child: 
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             
-            Column(
+            Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.max,
-                      children: <Widget>[
                         // Container(
                         //   height: 60, 
                         //   width: 60, 
@@ -505,50 +623,193 @@ Widget userItemCard(int position, BuildContext context1){
 
                             Expanded(
                             child: Container(
-                              padding: EdgeInsets.fromLTRB(16, 8, 8, 12),
+                              padding: EdgeInsets.fromLTRB(8, 8, 8, 12),
                             decoration: BoxDecoration(),
                             child: Column(
                                       mainAxisAlignment: MainAxisAlignment.start,
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: <Widget>[
 
-                                        Text(_filteredUsers[position].name!, style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyLarge, decorationStyle: TextDecorationStyle.dotted, decoration: TextDecoration.underline, fontWeight: FontWeight.w500 )),
+                                        Text(_filteredUsers[position].name!, style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyLarge, fontWeight: FontWeight.w600, color: Colors.black )),
+                                        // Text(_filteredUsers[position].name!, style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyLarge, decorationStyle: TextDecorationStyle.dotted, decoration: TextDecoration.underline, fontWeight: FontWeight.w500 )),
                                         // sizedBox(4),
                                         
-                                        sizedBox(12),
+                                        sizedBox(4),
+                                        Text("${_filteredUsers[position].id!} - ${_filteredUsers[position].role!.toUpperCase()}", style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, color: Colors.black54, fontWeight: FontWeight.w500, letterSpacing: 1),),
+                                        sizedBox(4),
+
+                                        // Text(_filteredUsers[position].role!,style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, color: (_filteredUsers[position].role!.toLowerCase() == Constants.salesManager.toLowerCase()) ? Colors.green.shade800 : Colors.blue, fontWeight: FontWeight.w600,),),
+                                        // sizedBox(8),
+                                        // Text("${_filteredUsers[position].id!}", style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall,)),
+                                        outstandingsList.isNotEmpty ?
+                                        Text('₹ ${NumberFormat("#,##,##0.00", "en_IN").format(outstandingsList.firstWhere(
+                                            (outstanding) => outstanding.id == _filteredUsers[position].id,
+                                            orElse: () => OutstandingByUser(total: 0),
+                                          ).total)}'
+                                          ,
+                                          style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyMedium, color: Colors.redAccent, fontWeight: FontWeight.bold),
+                                        ) : AppProgress(height: 16, width: 16),
+
+                                        sizedBox(8),
+
+                                        targetsDataList.isEmpty
+                                          ? Center(
+                                            child: Text('No targets available', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyMedium, color: Colors.black54)),
+                                            )
+                                          : 
+                                          
+                                          
+                                              (dealersList[0].role!.toLowerCase() != Constants.dealer.toLowerCase()) ?
+
+                                          Column(
+                                            children: (() {
+
+                                              // Filter targets for this specific user
+                                              var userTargets = targetsDataList.where((target) => target.relatedTo!.contains(_filteredUsers[position].id!)).toList();
+                                              
+                                              // Aggregate targets by categoryId
+                                              Map<int, Map<String, dynamic>> aggregated = {};
+                                              for (var t in userTargets) {
+                                                int catId = t.categoryId ?? 0;
+                                                double actual = double.tryParse(t.actualAmount ?? '0') ?? 0;
+                                                double targetVal = double.tryParse(t.targetAmount ?? '0') ?? 0;
+
+                                                if (!aggregated.containsKey(catId)) {
+                                                  aggregated[catId] = {
+                                                    'actual': 0.0,
+                                                    'target': 0.0,
+                                                    'name': t.name
+                                                  };
+                                                }
+                                                aggregated[catId]!['actual'] += actual;
+                                                aggregated[catId]!['target'] += targetVal;
+                                              }
+
+                                              // Map aggregated data to buildTargetItem widgets
+                                              return aggregated.entries.map((entry) {
+                                                int catId = entry.key;
+                                                double achieved = entry.value['actual'];
+                                                double targetAmount = entry.value['target'];
+
+                                                String categoryName = '';
+                                                if (catId == 1) {
+                                                  categoryName = 'VCL';
+                                                } else if (catId == 2) {
+                                                  categoryName = 'ATL';
+                                                } else if (catId == 3) {
+                                                  categoryName = 'Collections';
+                                                } else {
+                                                  categoryName = entry.value['name'] ?? 'Unknown';
+                                                }
+
+                                                double progress = achieved / (targetAmount > 0 ? targetAmount : 1);
+                                                
+                                                return Column(
+                                                  children: [
+                                                    // Text(currentMonthTargetDate ?? '', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall, color: Colors.black54)),
+                                                    buildTargetItem(
+                                                      context,
+                                                      categoryName,
+                                                      achieved,
+                                                      targetAmount > 0 ? targetAmount : 'To be decided',
+                                                      // (currentMonthTargetDate == 'To be decided') ? targetAmount > 0 ? targetAmount : 'To be decided' : targetAmount,
+                                                      progress < 0.5 ? Colors.red : const Color(0xFF008060),
+                                                    ),
+                                                    sizedBox(16),
+                                                  ],
+                                                );
+                                              }).toList();
+                                            })(),
+                                          )
+                                          :
+                                          Column(
+                                            children: 
+                                            // _filteredUsers[position].role!.toLowerCase() == 'dealer' ? 
+                                            targetsDataList.where((target) => target.userId == _filteredUsers[position].id).map((target) {
+                                              String categoryName = '';
+                                              if (target.categoryId == 1) {
+                                              categoryName = 'VCL';
+                                              } else if (target.categoryId == 2) {
+                                              categoryName = 'ATL';
+                                              } else if (target.categoryId == 3) {
+                                              categoryName = 'Collections';
+                                              } else {
+                                              categoryName = target.name ?? 'Unknown';
+                                              }
+                                              
+                                              double achieved = double.tryParse(target.actualAmount ?? '0') ?? 0;
+                                              double targetAmount = double.tryParse(target.targetAmount ?? '1') ?? 1;
+                                              double progress = achieved / targetAmount;
+                                              
+                                              return Column(
+                                              children: [
+                                                buildTargetItem(
+                                                context,
+                                                categoryName,
+                                                achieved,
+                                                targetAmount > 0 ? targetAmount : 'To be decided',
+                                                // (currentMonthTargetDate == 'To be decided') ? targetAmount > 0 ? targetAmount : 'To be decided' : targetAmount,
+                                                progress < 0.5 ? Colors.red : const Color(0xFF008060),
+                                                ),
+                                                sizedBox(16),
+                                              ],
+                                              );
+                                            }).toList()
+
+                                            // : targetsDataList.where((target) => target.relatedTo!.contains(_filteredUsers[position].id!)).map((target) {
+                                            //   String categoryName = '';
+                                            //   if (target.categoryId == 1) {
+                                            //   categoryName = 'VCL';
+                                            //   } else if (target.categoryId == 2) {
+                                            //   categoryName = 'ATL';
+                                            //   } else if (target.categoryId == 3) {
+                                            //   categoryName = 'Collections';
+                                            //   } else {
+                                            //   categoryName = target.name ?? 'Unknown';
+                                            //   }
+                                              
+                                            //   double achieved = double.tryParse(target.actualAmount ?? '0') ?? 0;
+                                            //   double targetAmount = double.tryParse(target.targetAmount ?? '1') ?? 1;
+                                            //   double progress = achieved / targetAmount;
+                                              
+                                            //   return Column(
+                                            //   children: [
+                                            //     buildTargetItem(
+                                            //     context,
+                                            //     categoryName,
+                                            //     achieved,
+                                            //     targetAmount,
+                                            //     progress < 0.5 ? Colors.red : const Color(0xFF008060),
+                                            //     ),
+                                            //     sizedBox(16),
+                                            //   ],
+                                            //   );
+                                            // }).toList()
+                                          )
                                         
-                                        Row(children: [
-                                          Container(
-                                          padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 12.0),
-                                          decoration: BoxDecoration(
-                                            color: 
-                                            (_filteredUsers[position].role!.toLowerCase() == Constants.salesManager.toLowerCase()) ?
-                                            Colors.green.shade600.withOpacity(0.2) : // Light blue background
-                                            Colors.blue.withOpacity(0.2), // Light blue background
-                                            borderRadius: BorderRadius.circular(16.0), // Rounded corners
-                                          ),
-                                          child: Text(_filteredUsers[position].role!,style: TextStyle( color: (_filteredUsers[position].role!.toLowerCase() == Constants.salesManager.toLowerCase()) ?
-                                            Colors.green.shade800 : Colors.blue, fontWeight: FontWeight.w500,),),
-                                        ),
-                                        SizedBox(width: 8,),
-                                          Text("${_filteredUsers[position].id!}", style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall,)),
+                                        // Row(children: [
+                                        //   Container(
+                                        //   padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 12.0),
+                                        //   decoration: BoxDecoration(
+                                        //     color: 
+                                        //     (_filteredUsers[position].role!.toLowerCase() == Constants.salesManager.toLowerCase()) ?
+                                        //     Colors.green.shade600.withOpacity(0.2) : // Light blue background
+                                        //     Colors.blue.withOpacity(0.2), // Light blue background
+                                        //     borderRadius: BorderRadius.circular(16.0), // Rounded corners
+                                        //   ),
+                                        //   child: Text(_filteredUsers[position].role!,style: TextStyle( color: (_filteredUsers[position].role!.toLowerCase() == Constants.salesManager.toLowerCase()) ?
+                                        //     Colors.green.shade800 : Colors.blue, fontWeight: FontWeight.w500,),),
+                                        // ),
+                                        // SizedBox(width: 8,),
+                                        //   Text("${_filteredUsers[position].id!}", style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodySmall,)),
                                       
-                                        ],),
+                                        // ],),
                                         
                                        
                                       ],
                             ),),),
                             
-                            Container(
-                              // decoration: const BoxDecoration(
-                              //   color: Colors.black12,
-                              //   borderRadius: BorderRadius.all(Radius.circular(24)),
-                              // ),
-                              padding: const EdgeInsets.all(6),
-                              child:  Icon(PhosphorIconsRegular.caretRight, color: Colors.black38, size: 24,),
-                            ),
-                        ],
-                      ),
+                            
                     
                     ]
                   ),
@@ -757,4 +1018,23 @@ Widget userItemCard(int position, BuildContext context1){
 
   }
 
+}
+
+
+class OutstandingByUser {
+  String? id;
+  double? total;
+
+  OutstandingByUser({this.id, this.total});
+
+  OutstandingByUser.fromJson(Map<String, dynamic> json): 
+  id = json['id'], 
+  total = (json['total'] as num?)?.toDouble();
+
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id']= id;
+    data['total']= total;
+    return data;
+  }
 }

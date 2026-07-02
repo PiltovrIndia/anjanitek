@@ -466,7 +466,7 @@ class _NotificationsDealerState extends State<NotificationsDealer> with TickerPr
                 SafeArea(
 
                 child: Container(
-                    margin: EdgeInsets.all(16),
+                    margin: const EdgeInsets.all(16),
                     child:
                         Column(
 
@@ -518,7 +518,7 @@ class _NotificationsDealerState extends State<NotificationsDealer> with TickerPr
                             onRefresh: _refreshList,
                             child: 
                               ListView.builder(
-                                  physics: AlwaysScrollableScrollPhysics(),
+                                  physics: const AlwaysScrollableScrollPhysics(),
                                   controller: scrollController,
                                   scrollDirection: Axis.vertical,
                                   itemCount: storedNotifications.length,
@@ -532,8 +532,8 @@ class _NotificationsDealerState extends State<NotificationsDealer> with TickerPr
                                                   ),alignment: Alignment.bottomCenter,
                                                   child:
                                                 Container(
-                                                      margin: EdgeInsets.fromLTRB(0,8,0,8),
-                                                      padding: EdgeInsets.fromLTRB(16,16,16,8),
+                                                      margin: const EdgeInsets.fromLTRB(0,8,0,8),
+                                                      padding: const EdgeInsets.fromLTRB(16,16,16,8),
                                                       decoration: BoxDecoration(
                                                         color: Colors.white,
                                                         borderRadius: const BorderRadius.all(Radius.circular(24)),
@@ -556,10 +556,10 @@ class _NotificationsDealerState extends State<NotificationsDealer> with TickerPr
                                   }),
                               )
                             )
-                            : Text('0 Notifications'),
+                            : const Text('0 Notifications'),
                             
                             // loader while fetching data
-                            refreshCheckProgress? AppProgress(height: 30, width: 30,) : new SizedBox(height: 0,),
+                            refreshCheckProgress? const AppProgress(height: 30, width: 30,) : new SizedBox(height: 0,),
                             
                           
                             
@@ -597,8 +597,8 @@ Widget invoiceCard(int position){
     children: <Widget>[
       
       (storedNotifications[position].seen == 0) ? 
-      Icon(PhosphorIconsRegular.notification, size: 24, color: Color(0xFF008060)) :
-      Icon(PhosphorIconsRegular.notification, size: 24, color: Color(0xFF999999)),
+      const Icon(PhosphorIconsRegular.notification, size: 24, color: Color(0xFF008060)) :
+      const Icon(PhosphorIconsRegular.notification, size: 24, color: Color(0xFF999999)),
       sizedBox(8),
       Text('${storedNotifications[position].message}', style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyLarge, color: Colors.black, fontWeight: FontWeight.w500, fontSize: 14), ),
       // Text('${notificationsList[position].message}', textAlign: TextAlign.center, style: GoogleFonts.inter(textStyle: Theme.of(context).textTheme.bodyLarge, color: Colors.black, fontWeight: FontWeight.w500, fontSize: 14), overflow: TextOverflow.ellipsis, maxLines: 2, softWrap: true, ),

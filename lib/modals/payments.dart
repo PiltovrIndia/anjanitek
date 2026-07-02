@@ -36,7 +36,7 @@ class Payments {
   invoiceNo = json['invoiceNo'],
   transactionId = json['transactionId'],
   paymentDate = json['paymentDate'],
-  adminId = json['gcm_regId'],
+  adminId = json['adminId'],
   particular = json['particular'],
   balance = (json['balance'] as num?)?.toDouble(),
   
@@ -61,7 +61,7 @@ class Payments {
     data['invoiceNo']= invoiceNo;
     data['transactionId']= transactionId;
     data['paymentDate']= paymentDate;
-    data['gcm_regId']= adminId;
+    data['adminId']= adminId;
     data['particular']= particular;
     data['balance']= balance;
     
